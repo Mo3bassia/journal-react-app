@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+body {
+  min-height: 100vh;
+}
+
+html[lang="en"].highlight {
+  font-family: "Dancing Script", serif;
+}
+html[lang="en"] {
+  font-family: "Montserrat", sans-serif;
+  direction: ltr;
+}
+html[lang="ar"] {
+  font-family: "Rubik", sans-serif;
+  direction: rtl;
+}
