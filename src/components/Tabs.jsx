@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 
 function Tabs({ lang, selected, setSelected }) {
   const handleChange = (event) => {
-    console.log(event.target.value);
     setSelected(event.target.value);
   };
   return (
