@@ -18,7 +18,7 @@ function SuccessAlert({ lang, title, message, timeForMsg }) {
         className={`fixed bottom-5 ${
           lang == "en" ? "left-5" : "right-5"
         } bg-teal-50 border-t-2 border-teal-500 rounded-lg p-4 dark:bg-teal-800/30
-          ${isVisible ? "animate-slide-up" : "animate-slide-right"}`}
+          ${isVisible ? "animate-slide-up" : "animate-slide-right"} z-20`}
         role="alert"
         tabIndex="-1"
         aria-labelledby="hs-bordered-success-style-label"

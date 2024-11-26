@@ -9,7 +9,7 @@ function Tabs({ lang, selected, setSelected }) {
     <div className="radio-inputs flex flex-wrap rounded-lg box-border shadow-lg dark:shadow-slate-800 dark:shadow-md p-1 max-w-[300px] text-sm mx-auto my-7">
       <NavLink
         to="/add"
-        className="radio flex-1 text-center"
+        className="radio flex-1 text-center w-28 sm:w-32"
         onClick={() => setSelected("Add")}
       >
         <label className="">
@@ -35,12 +35,12 @@ function Tabs({ lang, selected, setSelected }) {
         </label>
       </NavLink>
 
-      <label className="radio flex-1 text-center">
-        <NavLink
-          to="/notes"
-          className="radio flex-1 text-center"
-          onClick={() => setSelected("Notes")}
-        >
+      <NavLink
+        to="/notes"
+        className="radio flex-1 text-center w-28 sm:w-32"
+        onClick={() => setSelected("Notes")}
+      >
+        <label className="radio flex-1 text-center">
           <input
             type="radio"
             name="radio"
@@ -60,8 +60,8 @@ function Tabs({ lang, selected, setSelected }) {
           >
             {lang == "en" ? "Notes" : "مذكراتي"}
           </span>
-        </NavLink>
-      </label>
+        </label>
+      </NavLink>
     </div>
   );
 }

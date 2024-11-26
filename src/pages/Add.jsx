@@ -12,7 +12,6 @@ function Add({ lang, setNotes }) {
   const form = useRef(null);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  let check = false;
   const timeForMsg = 5000;
 
   function handleAdd(e) {
@@ -114,13 +113,13 @@ function Add({ lang, setNotes }) {
           >
             <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(غير اجباري)"}
+              {lang == "en" ? "(Not required)" : "(اختياري)"}
             </span>
           </label>
           <input
             type="text"
             id="title"
-            className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className=" outline-none bg-white border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder={
               lang == "en"
                 ? " A New Day: Thoughts and Events"
@@ -137,13 +136,13 @@ function Add({ lang, setNotes }) {
           >
             <span>{lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(غير اجباري)"}
+              {lang == "en" ? "(Not required)" : "(اختياري)"}
             </span>
           </label>
           <input
             type="text"
             id="category"
-            className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className=" outline-none bg-white border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder={
               lang == "en"
                 ? " Select a category: Work, Study, Personal Life, Mood"
@@ -167,7 +166,7 @@ function Add({ lang, setNotes }) {
           <textarea
             type="text"
             id="Note"
-            className="min-h-28 outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="min-h-28 outline-none bg-white border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required={true}
             placeholder={
               lang == "en"
@@ -182,14 +181,14 @@ function Add({ lang, setNotes }) {
           <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
             <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(غير اجباري)"}
+              {lang == "en" ? "(Not required)" : "(اختياري)"}
             </span>
           </label>
           <MoodTabs lang={lang} mood={mood} setMood={setMood} />
         </div>
         <button
           type="submit"
-          className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg focus:ring-0 focus:outline-none p-2.5 dark:bg-blue-400 transition-colors dark:focus:bg-blue-600 dark:text-white px-5 py-2 mx-auto block mt-4"
+          className="text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-3 rounded-lg text-white mt-5 mx-auto"
           onClick={(e) => handleAdd(e)}
         >
           {lang == "en" ? "add ➕" : "اضافة ➕"}

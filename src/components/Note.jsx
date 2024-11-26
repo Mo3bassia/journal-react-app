@@ -19,7 +19,7 @@ function Note({ lang, note }) {
     <Link to={`/note/${id}`} className="block relative">
       <div
         key={id}
-        className="select-none transition-all hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer p-4 bg-[#f0f1f1] dark:bg-gray-800 rounded-lg shadow-md"
+        className="select-none transition-all hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer p-4 bg-white dark:bg-[#232936] rounded-lg shadow-md"
       >
         <div className="my-2 flex justify-between items-center text-gray-600 dark:text-gray-400">
           <span>

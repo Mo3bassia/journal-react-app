@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { convertDate } from "../App";
 import Note from "../components/Note";
 import { Link } from "react-router-dom";
+import DayNotes from "../components/DayNotes";
 
-function Notes({ lang, notes, setSelected }) {
+function Notes({ lang, notes, setSelected, setNotes }) {
   let allDates = [];
   notes.map((note) => {
     allDates.push(note.date);
@@ -20,19 +21,14 @@ function Notes({ lang, notes, setSelected }) {
           const notesOfDate = notes.filter((note) => note.date === uniqueDate);
 
           return (
-            <div
+            <DayNotes
+              notes={notes}
+              setNotes={setNotes}
               key={uniqueDate}
-              className="space-y-5 border p-4 py-6 rounded-xl dark:bg-transparent bg-slate-100 border-gray-400 dark:border-gray-700"
-            >
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 md:mb-8 ">
-                {lang == "en"
-                  ? convertDate(uniqueDate)[0].toDateString()
-                  : convertDate(uniqueDate)[1]}
-              </h2>
-              {notesOfDate.map((note) => {
-                return <Note key={note.id} note={note} lang={lang} />;
-              })}
-            </div>
+              uniqueDate={uniqueDate}
+              lang={lang}
+              notesOfDate={notesOfDate}
+            />
           );
         })}
       </div>

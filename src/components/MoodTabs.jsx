@@ -11,7 +11,7 @@ function MoodTabs({ lang, mood, setMood }) {
     <div
       className="radio-inputs flex flex-wrap rounded-lg box-border shadow-lg text-gray-900
     dark:bg-gray-800 
-    dark:text-white dark:shadow-md p-1 mx-auto my-3 text-base md:text-xl gap-2 max-w-[500px]"
+    dark:text-white dark:shadow-md  mx-auto my-3 text-base md:text-xl gap-2 max-w-[500px]"
     >
       {usedMoodsEmoji.map((emoji, index) => {
         return (

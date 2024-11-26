@@ -17,7 +17,7 @@ function ErrorAlert({ message, title, lang }) {
         className={`fixed bottom-5 ${
           lang == "en" ? "right-5" : "left-5"
         } bg-red-50 border-l-4 border-red-500 p-4 dark:bg-red-800/30
-          ${isVisible ? "animate-slide-up" : "animate-slide-right"}`}
+          ${isVisible ? "animate-slide-up" : "animate-slide-right"} z-50`}
         role="alert"
         tabIndex="-1"
         aria-labelledby="hs-bordered-red-style-label"
