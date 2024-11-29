@@ -6,6 +6,7 @@ export default {
     extend: {
       lineHeight: {
         loose: "2 !important",
+        medium: "1.5 !important",
       },
       animation: {
         "slide-up": "slideUp 0.7s ease-out forwards",

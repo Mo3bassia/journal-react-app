@@ -4,7 +4,10 @@ import SuccessAlert from "../components/SuccessAlert";
 import ErrorAlert from "../components/ErrorAlert";
 import { moods } from "../App";
 
-function Add({ lang, setNotes }) {
+function Add({ lang, setSelected, setNotes }) {
+  useEffect(function () {
+    setSelected("Add");
+  }, []);
   const [mood, setMood] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");

@@ -6,6 +6,7 @@ import MoodTabs from "./MoodTabs";
 import SuccessAlert from "./SuccessAlert";
 import ErrorAlert from "./ErrorAlert";
 import { moods } from "../App";
+import { Link } from "react-router-dom";
 
 function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +88,6 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
               notes.filter((n) => n.date == uniqueDate).length - 1
             ]
           );
-          let rest = notes.slice(index, notes.length - 1);
           let editedNote = {
             id: index + 2,
             title: titleTxt,
@@ -119,7 +119,6 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
           firstPart.push(editedNote);
           let secondPart = [];
           secondPart = notes.slice(index + 1, notes.length);
-          console.log(secondPart);
           secondPart = secondPart.map((n) => {
             n.id += 1;
             return n;
@@ -128,6 +127,26 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
           console.log(editedNotes);
           setNotes(editedNotes);
           setIsOpen((i) => !i);
+
+          setSuccess(
+            <SuccessAlert
+              lang={lang}
+              title={
+                lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"
+              }
+              message={
+                lang == "en"
+                  ? "You have successfully added your note."
+                  : "لقد قمت بالتو بإضافة مذكرات اخري!"
+              }
+              timeForMsg={timeForMsg}
+            />
+          );
+          if (!success) {
+            setTimeout(() => {
+              setSuccess("");
+            }, timeForMsg);
+          }
         } else {
           setError(
             <ErrorAlert
@@ -162,9 +181,14 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
       {success}
       {error}
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 md:mb-8 ">
-        {lang == "en"
-          ? convertDate(uniqueDate)[0].toDateString()
-          : convertDate(uniqueDate)[1]}
+        <Link
+          className="hover:text-slate-500 dark:hover:text-gray-400"
+          to={`/notes/${uniqueDate.split("/").join("-")}`}
+        >
+          {lang == "en"
+            ? convertDate(uniqueDate)[0].toDateString()
+            : convertDate(uniqueDate)[1]}
+        </Link>
       </h2>
       {notesOfDate.map((note) => {
         return <Note key={note.id} note={note} lang={lang} />;

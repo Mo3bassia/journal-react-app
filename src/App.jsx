@@ -10,6 +10,7 @@ import SingleNote from "./components/SingleNote";
 import { Link } from "react-router-dom";
 import Note from "./components/Note.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Home from "./pages/Home.jsx";
 
 export const moods = {
   en: {
@@ -55,6 +56,7 @@ function App() {
   const [lang, setLanguage] = useLocalStorage("ar", "lang");
   const [notes, setNotes] = useLocalStorage([], "notes");
   const [selected, setSelected] = useState("");
+  const password = import.meta.env.VITE_PASSWORD;
 
   let allDates = [];
   notes.map((note) => {
@@ -75,10 +77,19 @@ function App() {
         <Tabs lang={lang} selected={selected} setSelected={setSelected} />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<p className="hidden">s</p>} />
+            <Route
+              path="/"
+              element={<Home setSelected={setSelected} lang={lang} />}
+            />
             <Route
               path="add"
-              element={<Add lang={lang} setNotes={setNotes} />}
+              element={
+                <Add
+                  setSelected={setSelected}
+                  lang={lang}
+                  setNotes={setNotes}
+                />
+              }
             />
             <Route
               path="notes"
@@ -120,14 +131,16 @@ function App() {
                   path={`/notes/${uniqueDate.split("/").join("-")}`}
                   element={
                     <div className="container mx-auto px-4 md:px-6">
-                      <h1 className="text-4xl font-extrabold my-8">
-                        {lang == "en"
-                          ? convertDate(uniqueDate)[0].toDateString()
-                          : convertDate(uniqueDate)[1]}
-                      </h1>
-                      {notesOfDate.map((note) => {
-                        return <Note key={note.id} note={note} lang={lang} />;
-                      })}
+                      <div className="space-y-6">
+                        <h1 className="text-4xl font-extrabold my-8">
+                          {lang == "en"
+                            ? convertDate(uniqueDate)[0].toDateString()
+                            : convertDate(uniqueDate)[1]}
+                        </h1>
+                        {notesOfDate.reverse().map((note) => {
+                          return <Note key={note.id} note={note} lang={lang} />;
+                        })}
+                      </div>
                     </div>
                   }
                 />

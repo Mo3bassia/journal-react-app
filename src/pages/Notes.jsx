@@ -16,7 +16,7 @@ function Notes({ lang, notes, setSelected, setNotes }) {
 
   return (
     <div className="container mx-auto mt-9 px-4">
-      <div className="space-y-6 md:space-y-10 flex-col mt-8 ">
+      <div className="space-y-16 md:space-y-10 flex-col mt-8 ">
         {uniqueDates.reverse().map((uniqueDate) => {
           const notesOfDate = notes.filter((note) => note.date === uniqueDate);
 

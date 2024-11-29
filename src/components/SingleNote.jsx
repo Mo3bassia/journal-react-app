@@ -21,7 +21,11 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
     moodAr,
     time,
     moodEn,
+    lastEditDate,
+    lastEditTime,
+    addedLater,
   } = note;
+
   const [isOpen, setIsOpen] = useState(false);
   const form = useRef(null);
   const [mood, setMood] = useState("");
@@ -52,15 +56,15 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
       n.id = i + 1;
     });
     setNotes(editedNotes);
-    console.log(
-      location.pathname.slice("/")[location.pathname.slice("/").length - 1]
-    );
+    // console.log(
+    //   location.pathname.slice("/")[location.pathname.slice("/").length - 1]
+    // );
     if (
       location.pathname.slice("/")[location.pathname.slice("/").length - 1] >
         editedNotes.length &&
       editedNotes.length != 0
     ) {
-      navigate(`/note/${editedNotes.length}`);
+      navigate(`/note/${editedNotes.length - 1}`);
     } else if (editedNotes.length == 0) {
       navigate(`/add/`);
     }
@@ -93,9 +97,9 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
     editedNote.note = noteVal;
     editedNote.emoji = mood;
     editedNote.title = titleTxt;
-    console.log(category, categoryTxt);
-    console.log(note, noteVal);
-    console.log(title, titleTxt);
+    // console.log(category, categoryTxt);
+    // console.log(note, noteVal);
+    // console.log(title, titleTxt);
     if (
       category !== categoryTxt ||
       noteTxt !== noteVal ||
@@ -154,6 +158,11 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
             {lang == "en"
               ? convertDate(date)[0].toDateString()
               : convertDate(date)[1]}
+            {addedLater && (
+              <span className="px-3 py-2 rounded-lg shadow-md bg-white text-gray-900 dark:bg-[#232936] dark:text-white mx-2">
+                {lang == "en" ? "added later" : "أُضيف لاحقًا"}
+              </span>
+            )}
           </span>
           <span>{time}</span>
         </div>
@@ -299,7 +308,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
         {title && (
           <h2 className="mb-2 flex items-center justify-between text-gray-900 dark:text-white  font-extrabold">
             <div className="text-3xl md:text-4xl flex items-center gap-2">
-              <span>{title}</span>
+              <span className="leading-medium">{title}</span>
               <div className="hidden sm:flex">
                 <button
                   onClick={toggleModal}
@@ -346,6 +355,14 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
               <span className="text-2xl"> {emoji}</span>
             </span>
           </h2>
+        )}
+        {lastEditDate && (
+          <div className="my-2 mt-4 text-gray-600 dark:text-gray-400">
+            <span>{lang == "en" ? "Edited at " : "تم التعديل في "}</span>
+            <span>
+              {lastEditDate} - {lastEditTime}
+            </span>
+          </div>
         )}
         {category != "" && (
           <p className="relative mb-6 mt-3">

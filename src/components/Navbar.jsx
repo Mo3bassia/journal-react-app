@@ -7,7 +7,7 @@ function Navbar({ setLanguage, lang, setIsDark }) {
     <nav className="py-7 bg-white text-gray-900 dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 dark:text-white">
       <div className="container mx-auto flex justify-between items-center px-4">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight">
-          <Link to="/">📚 {lang == "en" ? "Journal" : " يوميات"}</Link>
+          <Link to="/">📚 {lang == "en" ? "Journal" : " يومياتي"}</Link>
         </h1>
         <ul className="flex items-center gap-2">
           <li>
