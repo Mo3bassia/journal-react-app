@@ -7,8 +7,9 @@ import { moods } from "../App";
 import SuccessAlert from "./SuccessAlert";
 import ErrorAlert from "./ErrorAlert";
 import { useNavigate } from "react-router-dom";
+import { colors } from "../App";
 
-function SingleNote({ lang, note, setSelected, notes, setNotes }) {
+function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
   const navigate = useNavigate();
 
   const {
@@ -36,9 +37,39 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
   const [error, setError] = useState("");
   const timeForMsg = 5000;
 
-  useEffect(function () {
-    setSelected("");
-  }, []);
+  let categories = {};
+  notes.map((n, index) => {
+    if (n.category != "") {
+      let newI = index;
+      while (!(newI >= 0 && newI < colors.length)) {
+        newI -= colors.length;
+      }
+      categories[n.category] = colors[newI];
+    }
+  });
+
+  useEffect(
+    function () {
+      setSelected("");
+      // console.log(title);
+      // if (lang == "en") {
+      if (title) {
+        if (lang == "en") {
+          document.title = "Note | " + title;
+        } else {
+          document.title = "مذكرة | " + title;
+        }
+      } else {
+        if (lang == "en") {
+          document.title = "Journal | Note " + id;
+        } else {
+          document.title = "يومياتي | مذكرة " + id;
+        }
+      }
+      // }
+    },
+    [lang]
+  );
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -59,12 +90,17 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
     // console.log(
     //   location.pathname.slice("/")[location.pathname.slice("/").length - 1]
     // );
+    console.log(editedNotes.length);
+    console.log(location.pathname.slice("/"));
+    console.log(
+      location.pathname.split("/")[location.pathname.split("/").length - 1]
+    );
     if (
-      location.pathname.slice("/")[location.pathname.slice("/").length - 1] >
+      location.pathname.split("/")[location.pathname.split("/").length - 1] >
         editedNotes.length &&
       editedNotes.length != 0
     ) {
-      navigate(`/note/${editedNotes.length - 1}`);
+      navigate(`/note/${editedNotes.length}`);
     } else if (editedNotes.length == 0) {
       navigate(`/add/`);
     }
@@ -143,332 +179,375 @@ function SingleNote({ lang, note, setSelected, notes, setNotes }) {
       .filter((m) => m != null)[0];
     let newNotes = notes.slice();
     newNotes[index] = editedNote;
-    console.log(newNotes);
+    // console.log(newNotes);
     setNotes(newNotes);
     setIsOpen((i) => !i);
   }
 
   return (
     <>
-      <div key={id} className="p-4">
-        {success}
-        {error}
-        <div className="my-2 flex justify-between items-center text-gray-600 dark:text-gray-400 mb-5">
-          <span>
-            {lang == "en"
-              ? convertDate(date)[0].toDateString()
-              : convertDate(date)[1]}
+      <Modal
+        lang={lang}
+        toggleModal={toggleModal}
+        isOpen={isOpen}
+        modalTitle={lang == "en" ? "Edit Note" : "تعديل المذكرة"}
+        handleEdit={handleEdit}
+      >
+        <form ref={form}>
+          <div className="my-6">
+            <label
+              htmlFor="title"
+              className="text-lg   font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
+            >
+              <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
+              <span className="text-sm">
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
+              </span>
+            </label>
+            <input
+              type="text"
+              id="title"
+              className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder={
+                lang == "en"
+                  ? " A New Day: Thoughts and Events"
+                  : " يوميات يوم جديد: أفكار وأحداث"
+              }
+              value={titleTxt}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="my-6">
+            <label
+              htmlFor="category"
+              className="text-lg  font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
+            >
+              <span>
+                {lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}
+              </span>
+              <span className="text-sm">
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
+              </span>
+            </label>
+            <input
+              type="text"
+              id="category"
+              className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder={
+                lang == "en"
+                  ? " Select a category: Work, Study, Personal Life, Mood"
+                  : " اختر التصنيف: عمل، دراسة، حياة شخصية، مشاعر "
+              }
+              value={categoryTxt}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </div>
+          <div className="my-6">
+            <label
+              htmlFor="Note"
+              className="text-lg  flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between"
+            >
+              <span>{lang == "en" ? "✍️ Note..." : "✍️ الملاحظة..."}</span>
+              <span className="text-sm">
+                {lang == "en" ? "(required)" : "(اجباري)"}
+                <span className="text-red-600"> *</span>
+              </span>
+            </label>
+            <textarea
+              type="text"
+              id="Note"
+              className="min-h-40 outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required={true}
+              placeholder={
+                lang == "en"
+                  ? " Add your note here"
+                  : "اكتب ملاحظاتك أو أفكارك هنا"
+              }
+              value={noteVal}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
+          <div className="my-6">
+            <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
+              <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
+              <span className="text-sm">
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
+              </span>
+            </label>
+            <MoodTabs lang={lang} mood={mood} setMood={setMood} />
+          </div>
+        </form>
+      </Modal>
+      {success}
+      {error}
+      <div
+        key={id}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden p-4 animate-fade-in-up opacity-0"
+      >
+        <div className="text-gray-900 dark:text-white border-b dark:border-gray-700 pb-6">
+          <div className=" gap-2 flex items-center justify-between mt-2">
+            <span className="leading-medium text-3xl md:text-4xl font-extrabold">
+              {title != ""
+                ? title
+                : `${lang == "en" ? "Without title" : "بدون عنوان"}`}
+            </span>
+            <div className="flex">
+              <button
+                onClick={toggleModal}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 cursor-pointer"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                  />
+                </svg>
+              </button>
+              <button
+                className="p-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                onClick={handleRemove}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-red-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="flex gap-3 flex-wrap mt-4 items-center text-gray-600 dark:text-gray-400">
+            <span className="flex gap-2 ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                />
+              </svg>
+
+              {lang == "en"
+                ? convertDate(date)[0].toDateString()
+                : convertDate(date)[1]}
+            </span>
+            <span className="flex gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+
+              {time}
+            </span>
+            {lastEditDate && (
+              <div className="flex gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                  />
+                </svg>
+
+                <span>{lang == "en" ? "Edited at " : "تم التعديل في "}</span>
+                <span>
+                  {lastEditDate} - {lastEditTime}
+                </span>
+              </div>
+            )}
             {addedLater && (
-              <span className="px-3 py-2 rounded-lg shadow-md bg-white text-gray-900 dark:bg-[#232936] dark:text-white mx-2">
-                {lang == "en" ? "added later" : "أُضيف لاحقًا"}
+              <span className="text-sm px-3 py-1 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800 shadow inline-flex font-normal">
+                {lang == "en" ? "Added later" : "أُضيف لاحقًا"}
               </span>
             )}
-          </span>
-          <span>{time}</span>
-        </div>
-        <div className="sm:hidden flex items-center justify-between mb-4">
-          <div className="flex">
-            <button
-              onClick={toggleModal}
-              className="h-12 flex items-center justify-center w-12 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6 cursor-pointer"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                />
-              </svg>
-            </button>
-            <button
-              className="h-12 flex items-center justify-center w-12 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-              onClick={handleRemove}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-8 cursor-pointer text-red-600"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </button>
-          </div>
-          <span className="">
-            {lang == "en" ? `${moodEn}` : `${moodAr}`}
-            <span className="text-2xl"> {emoji}</span>
-          </span>
-        </div>
-        <Modal
-          lang={lang}
-          toggleModal={toggleModal}
-          isOpen={isOpen}
-          modalTitle={lang == "en" ? "Edit Note" : "تعديل المذكرة"}
-          handleEdit={handleEdit}
-        >
-          <form ref={form}>
-            <div className="my-6">
-              <label
-                htmlFor="title"
-                className="text-lg   font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
-              >
-                <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
-                <span className="text-sm">
-                  {lang == "en" ? "(Not required)" : "(اختياري)"}
-                </span>
-              </label>
-              <input
-                type="text"
-                id="title"
-                className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder={
-                  lang == "en"
-                    ? " A New Day: Thoughts and Events"
-                    : " يوميات يوم جديد: أفكار وأحداث"
-                }
-                value={titleTxt}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="my-6">
-              <label
-                htmlFor="category"
-                className="text-lg  font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
-              >
-                <span>
-                  {lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}
-                </span>
-                <span className="text-sm">
-                  {lang == "en" ? "(Not required)" : "(اختياري)"}
-                </span>
-              </label>
-              <input
-                type="text"
-                id="category"
-                className=" outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder={
-                  lang == "en"
-                    ? " Select a category: Work, Study, Personal Life, Mood"
-                    : " اختر التصنيف: عمل، دراسة، حياة شخصية، مشاعر "
-                }
-                value={categoryTxt}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </div>
-            <div className="my-6">
-              <label
-                htmlFor="Note"
-                className="text-lg  flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between"
-              >
-                <span>{lang == "en" ? "✍️ Note..." : "✍️ الملاحظة..."}</span>
-                <span className="text-sm">
-                  {lang == "en" ? "(required)" : "(اجباري)"}
-                  <span className="text-red-600"> *</span>
-                </span>
-              </label>
-              <textarea
-                type="text"
-                id="Note"
-                className="min-h-40 outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base lg:text-lg  rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required={true}
-                placeholder={
-                  lang == "en"
-                    ? " Add your note here"
-                    : "اكتب ملاحظاتك أو أفكارك هنا"
-                }
-                value={noteVal}
-                onChange={(e) => setNote(e.target.value)}
-              />
-            </div>
-            <div className="my-6">
-              <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
-                <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
-                <span className="text-sm">
-                  {lang == "en" ? "(Not required)" : "(اختياري)"}
-                </span>
-              </label>
-              <MoodTabs lang={lang} mood={mood} setMood={setMood} />
-            </div>
-          </form>
-        </Modal>
 
-        {title && (
-          <h2 className="mb-2 flex items-center justify-between text-gray-900 dark:text-white  font-extrabold">
-            <div className="text-3xl md:text-4xl flex items-center gap-2">
-              <span className="leading-medium">{title}</span>
-              <div className="hidden sm:flex">
-                <button
-                  onClick={toggleModal}
-                  className="h-12 flex items-center justify-center w-12 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 cursor-pointer"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                    />
-                  </svg>
-                </button>
-                <button
-                  className="h-12 flex items-center justify-center w-12 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  onClick={handleRemove}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-8 cursor-pointer text-red-600"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <span className="hidden sm:block">
-              {lang == "en" ? `${moodEn}` : `${moodAr}`}
-              <span className="text-2xl"> {emoji}</span>
-            </span>
-          </h2>
-        )}
-        {lastEditDate && (
-          <div className="my-2 mt-4 text-gray-600 dark:text-gray-400">
-            <span>{lang == "en" ? "Edited at " : "تم التعديل في "}</span>
-            <span>
-              {lastEditDate} - {lastEditTime}
-            </span>
+            {emoji && (
+              <span className="text-sm px-3 py-1 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800 shadow inline-flex font-normal">
+                {lang == "en" ? `${moodEn}` : `${moodAr}`} {emoji}
+              </span>
+            )}
+            {category != "" && (
+              <>
+                {Object.keys(categories).map((c) => {
+                  return (
+                    <div
+                      key={c}
+                      className={`${category !== c && "hidden"} font-normal`}
+                    >
+                      {category == c && (
+                        <div
+                          style={{
+                            background: isDark
+                              ? categories[c].dark.background
+                              : categories[c].light.background,
+                            color: isDark
+                              ? categories[c].dark.text
+                              : categories[c].light.text,
+                            borderColor: isDark
+                              ? categories[c].dark.border
+                              : categories[c].light.border,
+                          }}
+                          className={`text-xs md:text-sm text-gray-700 w-fit flex items-center gap-2 dark:text-gray-300 rounded-md px-3 py-1 shadow-sm border`}
+                        >
+                          <span>{category}</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 6h.008v.008H6V6Z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
-        )}
-        {category != "" && (
-          <p className="relative mb-6 mt-3">
-            <span className={`${lang == "en" ? "ml-6" : "mr-6"}`}>
-              {lang == "en" ? "category:" : "التصنيف:"} {category}
-            </span>
-            <span
-              className={`absolute ${
-                lang == "en" ? "left-0" : "right-0"
-              } top-1/2 -translate-y-1/2 text-sm flex items-center justify-center`}
-            >
-              📂
-            </span>
-          </p>
-        )}
-        <p className="text-gray-600 text-lg md:text-xl dark:text-gray-300 mb-4 whitespace-pre-line leading-loose">
+        </div>
+        <p className="text-gray-600 text-lg border-b dark:border-gray-700 pt-6 pb-6 md:text-xl dark:text-gray-300  whitespace-pre-line leading-loose">
           {noteTxt}
         </p>
-      </div>
-      <div className={`flex justify-center gap-4 flex-row-reverse`}>
-        {note.id != notes.length && (
-          <Link
-            to={`/note/${note.id + 1}`}
-            className={`bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-3 rounded-lg text-white flex-row-reverse`}
-          >
-            {lang == "en" ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                />
-              </svg>
-            )}
-            <span>
-              {lang == "en"
-                ? `Next (${note.id + 1})`
-                : `التالي (${note.id + 1}) `}
-            </span>
-          </Link>
-        )}
-        {note.id != 1 && (
-          <Link
-            to={`/note/${note.id - 1}`}
-            className={`bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-3 rounded-lg text-white flex-row-reverse`}
-          >
-            <span>
-              {lang == "en"
-                ? `(${note.id - 1}) Previous`
-                : `(${note.id - 1}) السابق`}
-            </span>
-            {lang != "en" ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                />
-              </svg>
-            )}
-          </Link>
-        )}
+        <div className="flex justify-between items-center flex-row-reverse pt-6 pb-3">
+          {note.id != notes.length && (
+            <Link
+              to={`/note/${note.id + 1}`}
+              className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
+            >
+              {lang == "en" ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                  />
+                </svg>
+              )}
+              <span>
+                {lang == "en"
+                  ? `Next (${note.id + 1})`
+                  : `التالي (${note.id + 1}) `}
+              </span>
+            </Link>
+          )}
+          {note.id != 1 && (
+            <Link
+              to={`/note/${note.id - 1}`}
+              className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
+            >
+              <span>
+                {lang == "en"
+                  ? `(${note.id - 1}) Previous`
+                  : `(${note.id - 1}) السابق`}
+              </span>
+              {lang != "en" ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                  />
+                </svg>
+              )}
+            </Link>
+          )}
+        </div>
       </div>
     </>
   );

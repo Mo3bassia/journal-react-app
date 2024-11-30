@@ -8,7 +8,7 @@ import ErrorAlert from "./ErrorAlert";
 import { moods } from "../App";
 import { Link } from "react-router-dom";
 
-function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
+function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mood, setMood] = useState("");
   const [titleTxt, setTitle] = useState("");
@@ -34,55 +34,6 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
       if (input.required) {
         if (input.value) {
           let date = new Date(uniqueDate);
-          // setNotes((n) => {
-          //   setSuccess(
-          //     <SuccessAlert
-          //       lang={lang}
-          //       title={
-          //         lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"
-          //       }
-          //       message={
-          //         lang == "en"
-          //           ? "You have successfully added your note."
-          //           : "لقد قمت بالتو بإضافة مذكرات اخري!"
-          //       }
-          //       timeForMsg={timeForMsg}
-          //     />
-          //   );
-          //   if (!success) {
-          //     setTimeout(() => {
-          //       setSuccess("");
-          //     }, timeForMsg);
-          //   }
-          //   const newObj = {
-          //     id: n.length + 1,
-          //     title: titleTxt,
-          //     category: categoryTxt,
-          //     note: noteVal,
-          //     emoji: mood,
-          //     moodAr: Object.values(moods["ar"])
-          //       .map((m, index) => {
-          //         if (m == mood) {
-          //           return Object.keys(moods["ar"])[index];
-          //         }
-          //       })
-          //       .filter((m) => m != null)[0],
-          //     moodEn: Object.values(moods["en"])
-          //       .map((m, index) => {
-          //         if (m == mood) {
-          //           return Object.keys(moods["en"])[index];
-          //         }
-          //       })
-          //       .filter((m) => m != null)[0],
-          //     date: date.toLocaleDateString(),
-          //     time: date.toLocaleTimeString(),
-          //   };
-          //   setCategory("");
-          //   setNote("");
-          //   setTitle("");
-          //   inputs[0].focus();
-          //   return [...n, newObj];
-          // });
           let index = notes.indexOf(
             notes.filter((n) => n.date == uniqueDate)[
               notes.filter((n) => n.date == uniqueDate).length - 1
@@ -124,7 +75,7 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
             return n;
           });
           let editedNotes = [...firstPart, ...secondPart];
-          console.log(editedNotes);
+          // console.log(editedNotes);
           setNotes(editedNotes);
           setIsOpen((i) => !i);
 
@@ -173,32 +124,46 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
   }
 
   notesOfDate.reverse().sort((a, b) => b.id - a.id);
+
+  // console.log(notesOfDate);
   return (
-    <div
-      key={uniqueDate}
-      className="space-y-5 border p-4 py-6 rounded-xl dark:bg-transparent bg-gray-50 border-gray-300 dark:border-gray-700"
-    >
+    <>
       {success}
       {error}
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 md:mb-8 ">
-        <Link
-          className="hover:text-slate-500 dark:hover:text-gray-400"
-          to={`/notes/${uniqueDate.split("/").join("-")}`}
+      {notesOfDate.length != 0 && (
+        <div
+          key={uniqueDate}
+          className="animate-fade-in-up opacity-0 space-y-5 border p-4 py-6 rounded-xl dark:bg-transparent bg-gray-50 border-gray-300 dark:border-gray-700"
         >
-          {lang == "en"
-            ? convertDate(uniqueDate)[0].toDateString()
-            : convertDate(uniqueDate)[1]}
-        </Link>
-      </h2>
-      {notesOfDate.map((note) => {
-        return <Note key={note.id} note={note} lang={lang} />;
-      })}
-      <button
-        onClick={toggleModal}
-        className="border-2 border-blue-600 hover:bg-blue-600 flex gap-2 px-6 py-3 rounded-lg text-slate-800 hover:text-white dark:text-white mx-auto transition-colors"
-      >
-        {lang == "en" ? "Add More" : "إضافة المزيد"}
-      </button>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 md:mb-8 ">
+            <Link
+              className="hover:text-slate-500 dark:hover:text-gray-400"
+              to={`/notes/${uniqueDate.split("/").join("-")}`}
+            >
+              {lang == "en"
+                ? convertDate(uniqueDate)[0].toDateString()
+                : convertDate(uniqueDate)[1]}
+            </Link>
+          </h2>
+          {notesOfDate.map((note) => {
+            return (
+              <Note
+                key={note.id}
+                note={note}
+                lang={lang}
+                notes={notes}
+                isDark={isDark}
+              />
+            );
+          })}
+          <button
+            onClick={toggleModal}
+            className="border-2 border-blue-600 hover:bg-blue-600 flex gap-2 px-6 py-3 rounded-lg text-slate-800 hover:text-white dark:text-white mx-auto transition-colors"
+          >
+            {lang == "en" ? "Add More" : "إضافة المزيد"}
+          </button>
+        </div>
+      )}
       <Modal
         lang={lang}
         toggleModal={toggleModal}
@@ -214,7 +179,7 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
             >
               <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
               <span className="text-sm">
-                {lang == "en" ? "(Not required)" : "(اختياري)"}
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
               </span>
             </label>
             <input
@@ -239,7 +204,7 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
                 {lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}
               </span>
               <span className="text-sm">
-                {lang == "en" ? "(Not required)" : "(اختياري)"}
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
               </span>
             </label>
             <input
@@ -284,14 +249,14 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes }) {
             <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
               <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
               <span className="text-sm">
-                {lang == "en" ? "(Not required)" : "(اختياري)"}
+                {lang == "en" ? "(Optional)" : "(اختياري)"}
               </span>
             </label>
             <MoodTabs lang={lang} mood={mood} setMood={setMood} />
           </div>
         </form>
       </Modal>
-    </div>
+    </>
   );
 }
 

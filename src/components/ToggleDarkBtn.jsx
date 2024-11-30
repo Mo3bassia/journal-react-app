@@ -11,14 +11,22 @@ export default function ToggleBtn({ setIsDark }) {
           className="h-12 w-12 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
         >
           <svg
-            className="fill-violet-700 block dark:hidden"
-            fill="currentColor"
-            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6 dark:hidden"
           >
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+            />
           </svg>
+
           <svg
-            className="fill-yellow-500 hidden dark:block"
+            className="fill-slate-100 hidden dark:block size-8"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

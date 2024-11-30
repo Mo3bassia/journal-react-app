@@ -5,9 +5,9 @@ function Home({ lang, setSelected }) {
     setSelected("");
   }, []);
   return (
-    <div className="container mx-auto px-4 md:px-6">
+    <div className="container mx-auto px-4 md:px-6 animate-fade-in-up opacity-0">
       <div className="mt-5 bg-white border border-gray-100 dark:border-gray-700 dark:bg-[#232936] w-[700px] max-w-full rounded-lg shadow-xl p-6 mx-auto text-center">
-        <div className="my-5 mt-2 relative bg-blue-500/10 w-32 mx-auto h-32 flex items-center justify-center rounded-full">
+        <div className=" my-5 mt-2 relative bg-blue-500/10 w-32 mx-auto h-32 flex items-center justify-center rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

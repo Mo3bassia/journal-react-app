@@ -102,7 +102,7 @@ function Add({ lang, setSelected, setNotes }) {
   }
 
   return (
-    <div className="container mx-auto mt-9 px-4">
+    <div className="container mx-auto mt-9 px-4 animate-fade-in-up opacity-0">
       {success}
       {error}
       <h2 className="text-3xl lg:text-4xl xl:text-5xl block font-medium text-gray-900 dark:text-white mb-5 md:mb-8">
@@ -116,7 +116,7 @@ function Add({ lang, setSelected, setNotes }) {
           >
             <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(اختياري)"}
+              {lang == "en" ? "(Optional)" : "(اختياري)"}
             </span>
           </label>
           <input
@@ -139,7 +139,7 @@ function Add({ lang, setSelected, setNotes }) {
           >
             <span>{lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(اختياري)"}
+              {lang == "en" ? "(Optional)" : "(اختياري)"}
             </span>
           </label>
           <input
@@ -184,7 +184,7 @@ function Add({ lang, setSelected, setNotes }) {
           <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
             <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
             <span className="text-sm">
-              {lang == "en" ? "(Not required)" : "(اختياري)"}
+              {lang == "en" ? "(Optional)" : "(اختياري)"}
             </span>
           </label>
           <MoodTabs lang={lang} mood={mood} setMood={setMood} />
