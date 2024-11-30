@@ -13,6 +13,7 @@ export default {
         "slide-right": "slideRight 0.3s ease-in-out forwards",
         "fade-in-up": "0.3s fadeInUp 0.15s forwards",
       },
+
       keyframes: {
         slideUp: {
           "0%": { transform: "translateY(100%)", opacity: "0" },
