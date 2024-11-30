@@ -41,7 +41,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   }, []);
 
   return (
-    <div className="container mx-auto mt-9 px-4">
+    <div className="container mx-auto mt-9 px-4 animate-fade-in-up opacity-0">
       <div className="space-y-16 md:space-y-10 flex-col mt-8">
         {Object.keys(categories).length !== 0 && (
           <div className="flex gap-x-3 animate-fade-in-up opacity-0 flex-wrap gap-y-4">
@@ -102,6 +102,89 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
             })}
           </div>
         )}
+        <div className="flex gap-4 justify-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse  max-w-full gap-4">
+            <div className="p-2 bg-gray-50  dark:bg-gray-700 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-blue-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {notes.length}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {lang == "en" ? "Total Notes" : "إجمالي المذكرات"}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4">
+            <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-green-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                />
+              </svg>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {
+                  notes.filter((d) => d.date == new Date().toLocaleDateString())
+                    .length
+                }
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {lang == "en" ? "Today's Notes" : "مذكرات اليوم"}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4">
+            <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                />
+              </svg>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {notes.filter((n) => n.lastEditDate).length}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {lang == "en" ? "Edited Notes" : "المذكرات المعدلة"}
+              </div>
+            </div>
+          </div>
+        </div>
         {uniqueDates.length != 0 ? (
           uniqueDates.reverse().map((uniqueDate) => {
             const notesOfDate = notesFiltered.filter(
@@ -121,7 +204,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
             );
           })
         ) : (
-          <div className="container mx-auto px-4 md:px-6 animate-fade-in-up opacity-0">
+          <div className="container mx-auto px-4 md:px-6 ">
             <p className="text-center text-base md:text-lg lg:text-xl xl:text-2xl mt-10">
               {lang == "en"
                 ? "No notes match your search"

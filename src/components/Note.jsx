@@ -102,7 +102,8 @@ function Note({ lang, note, notes, isDark }) {
         }
         <ul className="text-sm"></ul>
         <p className="text-gray-600 text-base md:text-lg mt-4 dark:text-gray-400 mb-4 whitespace-pre-line">
-          {noteTxt}
+          {noteTxt.slice(0, 200)}
+          {noteTxt.length > 200 ? "..." : ""}
         </p>
         <div className="my-2 flex justify-between items-center text-gray-600 dark:text-gray-400 mt-6 text-sm gap-2">
           <div className="flex gap-2">
