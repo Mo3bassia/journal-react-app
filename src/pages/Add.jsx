@@ -17,6 +17,10 @@ function Add({ lang, setSelected, setNotes }) {
   const [error, setError] = useState("");
   const timeForMsg = 5000;
 
+  useEffect(() => {
+    document.title = `${lang == "en" ? "Add a note" : "إضافة مذكرة"}`;
+  }, [lang]);
+
   function handleAdd(e) {
     e.preventDefault();
     const inputs = form.current.querySelectorAll("input[type=text], textarea");

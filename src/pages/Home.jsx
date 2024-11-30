@@ -4,6 +4,11 @@ function Home({ lang, setSelected }) {
   useEffect(function () {
     setSelected("");
   }, []);
+
+  useEffect(() => {
+    document.title = `${lang == "en" ? "Journal" : "يومياتي"}`;
+  }, [lang]);
+
   return (
     <div className="container mx-auto px-4 md:px-6 animate-fade-in-up opacity-0">
       <div className="mt-5 bg-white border border-gray-100 dark:border-gray-700 dark:bg-[#232936] w-[700px] max-w-full rounded-lg shadow-xl p-6 mx-auto text-center">

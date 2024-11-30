@@ -5,12 +5,17 @@ import { Link } from "react-router-dom";
 import DayNotes from "../components/DayNotes";
 import { DayPicker } from "react-day-picker";
 import { colors } from "../App";
+import { ar } from "date-fns/locale";
 
 function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   let [currentCategory, setCurrentCategory] = useState("");
   let [isDateOpen, setDateOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [selectedDate, setSelectedDate] = useState();
+
+  useEffect(() => {
+    document.title = `${lang == "en" ? "My notes" : "مذكراتي"}`;
+  }, [lang]);
 
   function handleSearchChange(e) {
     setSearchValue(e.target.value);
@@ -79,6 +84,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
         {isDateOpen && (
           <div onClick={(e) => e.stopPropagation()}>
             <DayPicker
+              locale={lang != "en" ? ar : ""}
               // footer={
               //   <button
               //     className="border-2 border-red-600 hover:bg-red-600 flex gap-2 px-4 py-1 rounded-lg text-slate-800 hover:text-white dark:text-white mx-auto transition-colors mt-6"
@@ -132,7 +138,9 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 <input
                   type="text"
                   className="w-full py-2 px-10 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                  placeholder="ابحث في مذكراتك..."
+                  placeholder={`${
+                    lang == "en" ? "Search your notes..." : "ابحث في مذكراتك..."
+                  }`}
                   dir="rtl"
                   value={searchValue}
                   onChange={handleSearchChange}
@@ -225,7 +233,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               })}
             </div>
           )}
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse  max-w-full gap-4">
               <div className="p-2 bg-gray-50  dark:bg-gray-700 rounded-lg">
                 <svg
