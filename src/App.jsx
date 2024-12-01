@@ -164,7 +164,7 @@ function App() {
       <BrowserRouter>
         <Navbar setLanguage={setLanguage} lang={lang} setIsDark={setIsDark} />
         <Tabs lang={lang} selected={selected} setSelected={setSelected} />
-        <main className="flex-grow">
+        <main className="flex-grow ">
           <Routes>
             <Route
               path="/"

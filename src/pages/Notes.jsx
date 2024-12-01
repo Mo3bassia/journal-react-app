@@ -110,9 +110,9 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
           </div>
         )}
       </div>
-      <div className="container mx-auto mt-9 px-4 animate-fade-in-up opacity-0">
+      <div className="container mx-auto mt-9 px-4 ">
         <div className="space-y-16 md:space-y-10 flex-col mt-8">
-          <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
+          <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 animate-fade-in-up opacity-0">
             <div className="flex flex-col sm:flex-row gap-4">
               {/* Search Input */}
               <div className="flex-1 relative">
@@ -139,7 +139,6 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                   placeholder={`${
                     lang == "en" ? "Search your notes..." : "ابحث في مذكراتك..."
                   }`}
-                  dir="rtl"
                   value={searchValue}
                   onChange={handleSearchChange}
                 />
@@ -252,7 +251,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               })}
             </div>
           )}
-          <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 lg:flex lg:flex-row gap-4 justify-center flex-wrap">
+          <div className="flex animate-fade-in-up opacity-0 flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 lg:flex lg:flex-row gap-4 justify-center flex-wrap">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse  max-w-full gap-4">
               <div className="p-2 bg-gray-50  dark:bg-gray-700 rounded-lg">
                 <svg
@@ -280,11 +279,11 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               </div>
             </div>
             <div
-              className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer ${
+              className={`  rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer ${
                 new Date(selectedDate).toLocaleDateString() ==
                 new Date().toLocaleDateString()
                   ? "bg-slate-200 dark:bg-slate-700 "
-                  : ""
+                  : "bg-white dark:bg-gray-800  "
               }`}
               onClick={() =>
                 new Date(selectedDate).toLocaleDateString() !=

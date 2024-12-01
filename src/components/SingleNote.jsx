@@ -541,98 +541,103 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
         <p
           className={`text-gray-600 text-lg ${
             notes.length == 1 ? "" : "border-b pb-6"
+          } ${
+            lang == "en" ? "ml-3" : "mr-3"
           }  dark:border-gray-700 pt-6  md:text-xl dark:text-gray-300  whitespace-pre-line leading-loose`}
         >
           {noteTxt}
         </p>
-        <div className="flex justify-between items-center flex-row-reverse pt-6 pb-3">
-          {note.id != notes.length && (
-            <Link
-              to={`/note/${note.id + 1}`}
-              className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
-            >
-              {lang == "en" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
+        {note.id != notes.length ||
+          (note.id != 1 && (
+            <div className="flex justify-between items-center flex-row-reverse pt-6 pb-3">
+              {note.id != notes.length && (
+                <Link
+                  to={`/note/${note.id + 1}`}
+                  className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                  />
-                </svg>
+                  {lang == "en" ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                      />
+                    </svg>
+                  )}
+                  <span>
+                    {lang == "en"
+                      ? `Next (${note.id + 1})`
+                      : `التالي (${note.id + 1}) `}
+                  </span>
+                </Link>
               )}
-              <span>
-                {lang == "en"
-                  ? `Next (${note.id + 1})`
-                  : `التالي (${note.id + 1}) `}
-              </span>
-            </Link>
-          )}
-          {note.id != 1 && (
-            <Link
-              to={`/note/${note.id - 1}`}
-              className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
-            >
-              <span>
-                {lang == "en"
-                  ? `(${note.id - 1}) Previous`
-                  : `(${note.id - 1}) السابق`}
-              </span>
-              {lang != "en" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
+              {note.id != 1 && (
+                <Link
+                  to={`/note/${note.id - 1}`}
+                  className={` flex gap-2 items-center px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-row-reverse`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                  />
-                </svg>
+                  <span>
+                    {lang == "en"
+                      ? `(${note.id - 1}) Previous`
+                      : `(${note.id - 1}) السابق`}
+                  </span>
+                  {lang != "en" ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                      />
+                    </svg>
+                  )}
+                </Link>
               )}
-            </Link>
-          )}
-        </div>
+            </div>
+          ))}
       </div>
     </>
   );
