@@ -191,7 +191,7 @@ function Footer({ lang, notes }) {
           </div>
         </div>
         <div className="text-center pt-6 border-t dark:border-gray-700 ">
-          <p className="text-sm text-gray-600 dark:text-gray-400 flex gap-2 items-center justify-center">
+          <div className="text-sm text-gray-600 dark:text-gray-400 flex gap-2 items-center justify-center">
             <span>{lang == "en" ? "Made with   " : "صنع بكل   "}</span>
             <span>
               <svg
@@ -247,7 +247,7 @@ function Footer({ lang, notes }) {
                 </svg>
               </a>
             </div>
-          </p>
+          </div>
         </div>
       </div>
     </footer>
