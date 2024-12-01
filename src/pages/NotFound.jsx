@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 function NotFound({ lang }) {
+  useEffect(() => {
+    document.title = `${
+      lang == "en" ? "Journal | 404 not found" : "يومياتي | صفحة غير موجودة"
+    }`;
+  }, [lang]);
+
   return (
     <div className="container mx-auto px-4 md:px-6 animate-fade-in-up opacity-0">
       <div className="mt-5 bg-white border border-gray-100 dark:border-gray-700 dark:bg-[#232936] w-[400px] max-w-full rounded-lg shadow-xl p-6 mx-auto text-center">

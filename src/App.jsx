@@ -7,12 +7,11 @@ import Add from "./pages/Add";
 import Notes from "./pages/Notes";
 import Tabs from "./components/Tabs";
 import SingleNote from "./components/SingleNote";
-import { Link } from "react-router-dom";
 import Note from "./components/Note.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Pinned from "./pages/Pinned.jsx";
 import Home from "./pages/Home.jsx";
-import Footer from "./pages/Footer.jsx";
+import Footer from "./components/Footer.jsx";
 
 export const colors = [
   {
@@ -141,7 +140,7 @@ export function convertDate(date) {
 }
 
 function App() {
-  const [isDark, setIsDark] = useLocalStorage(false, "dark");
+  const [isDark, setIsDark] = useLocalStorage(true, "dark");
   const [lang, setLanguage] = useLocalStorage("ar", "lang");
   const [notes, setNotes] = useLocalStorage([], "notes");
   const [selected, setSelected] = useState("");

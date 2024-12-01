@@ -18,7 +18,9 @@ function Add({ lang, setSelected, setNotes }) {
   const timeForMsg = 5000;
 
   useEffect(() => {
-    document.title = `${lang == "en" ? "Add a note" : "إضافة مذكرة"}`;
+    document.title = `${
+      lang == "en" ? "Journal | Add a note" : "يومياتي | إضافة مذكرة"
+    }`;
   }, [lang]);
 
   function handleAdd(e) {
@@ -52,7 +54,7 @@ function Add({ lang, setSelected, setNotes }) {
 
             const newObj = {
               id: n.length + 1,
-              title,
+              title: title || lang == "en" ? "No title" : "بدون عنوان",
               category,
               note: note,
               emoji: mood,

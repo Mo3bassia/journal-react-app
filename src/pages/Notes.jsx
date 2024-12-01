@@ -12,7 +12,9 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
-    document.title = `${lang == "en" ? "My notes" : "مذكراتي"}`;
+    document.title = `${
+      lang == "en" ? "Journal | My notes" : "يومياتي | مذكراتي"
+    }`;
   }, [lang]);
 
   function handleSearchChange(e) {
@@ -396,8 +398,8 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               );
             })
           ) : (
-            <div className="container mx-auto px-4 md:px-6 ">
-              <p className="text-center text-base md:text-lg lg:text-xl xl:text-2xl mt-10">
+            <div className="container mx-auto px-4 md:px-6 animate-fade-in-up opacity-0">
+              <p className="text-center text-base md:text-lg lg:text-xl xl:text-2xl mt-10 ">
                 {lang == "en"
                   ? "No notes match your search"
                   : "لا توجد مذكرات متطابقة مع بحثك"}

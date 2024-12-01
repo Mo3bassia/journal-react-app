@@ -9,6 +9,12 @@ function Pinned({ lang, isDark, notes, setSelected }) {
     setSelected("Pinned");
   }, []);
 
+  useEffect(() => {
+    document.title = `${
+      lang == "en" ? "Journal | Pinned notes" : "يومياتي | المثبتة"
+    }`;
+  }, [lang]);
+
   let pinnedNotes = notesOfDate.filter((n) => n.pinned);
   console.log(pinnedNotes);
   {
