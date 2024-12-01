@@ -10,8 +10,9 @@ import SingleNote from "./components/SingleNote";
 import { Link } from "react-router-dom";
 import Note from "./components/Note.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import Saved from "./pages/Saved.jsx";
+import Pinned from "./pages/Pinned.jsx";
 import Home from "./pages/Home.jsx";
+import Footer from "./pages/Footer.jsx";
 
 export const colors = [
   {
@@ -170,9 +171,9 @@ function App() {
               element={<Home setSelected={setSelected} lang={lang} />}
             />
             <Route
-              path="/saved"
+              path="/pinned"
               element={
-                <Saved
+                <Pinned
                   isDark={isDark}
                   setSelected={setSelected}
                   lang={lang}
@@ -258,11 +259,7 @@ function App() {
             <Route path="*" element={<NotFound lang={lang} />} />
           </Routes>
         </main>
-        <footer className="flex justify-center py-4">
-          <Link to="/add" className="text-gray-500 hover:text-gray-900">
-            Add Note
-          </Link>
-        </footer>
+        <Footer lang={lang} notes={notes} />
       </BrowserRouter>
     </div>
   );
