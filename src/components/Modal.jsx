@@ -5,6 +5,8 @@ const Modal = ({
   modalTitle,
   handleEdit,
   lang,
+  cancelButton,
+  confirmButton,
 }) => {
   return (
     <div>
@@ -37,18 +39,18 @@ const Modal = ({
                 placeholder="Enter something..."
               />
             </div> */}
-            <div className="flex justify-end space-x-4 gap-3">
+            <div className="flex justify-end space-x-4 gap-3 flex-wrap">
               <button
                 onClick={toggleModal}
-                className="bg-red-600/70 hover:bg-red-600/80 text-white  px-4 py-2 rounded-lg"
+                className="bg-red-600/70 hover:bg-red-600/80 text-white  px-6 py-2 rounded-lg"
               >
-                {lang == "en" ? "Save" : "إلغاء"}
+                {cancelButton}
               </button>
               <button
                 onClick={handleEdit}
-                className="bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-3 rounded-lg text-white"
+                className="bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-2 rounded-lg text-white"
               >
-                {lang == "en" ? "Save" : "حفظ"}
+                {confirmButton}
               </button>
             </div>
           </div>

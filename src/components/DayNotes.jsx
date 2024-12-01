@@ -170,6 +170,8 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
         isOpen={isOpen}
         modalTitle={lang == "en" ? "Add Note" : "إضافة مذكرة"}
         handleEdit={handleEdit}
+        cancelButton={lang == "en" ? "Cancel" : "إلغاء"}
+        confirmButton={lang == "en" ? "Save" : "حفظ"}
       >
         <form ref={form}>
           <div className="my-6">

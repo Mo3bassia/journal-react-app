@@ -10,6 +10,7 @@ import SingleNote from "./components/SingleNote";
 import { Link } from "react-router-dom";
 import Note from "./components/Note.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Saved from "./pages/Saved.jsx";
 import Home from "./pages/Home.jsx";
 
 export const colors = [
@@ -168,6 +169,17 @@ function App() {
               path="/"
               element={<Home setSelected={setSelected} lang={lang} />}
             />
+            <Route
+              path="/saved"
+              element={
+                <Saved
+                  isDark={isDark}
+                  setSelected={setSelected}
+                  lang={lang}
+                  notes={notes}
+                />
+              }
+            ></Route>
             <Route
               path="add"
               element={

@@ -25,9 +25,11 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
     lastEditDate,
     lastEditTime,
     addedLater,
+    pinned,
   } = note;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const form = useRef(null);
   const [mood, setMood] = useState("");
   const [titleTxt, setTitle] = useState("");
@@ -79,6 +81,10 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
     setMood(emoji);
   };
 
+  const toggleModalDelete = () => {
+    setIsDeleteOpen(!isDeleteOpen);
+  };
+
   function handleRemove() {
     let index = notes.indexOf(note);
 
@@ -121,6 +127,11 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
         setError("");
       }, timeForMsg);
     }
+  }
+
+  function handleCheckRemove() {
+    setIsDeleteOpen(false);
+    handleRemove();
   }
 
   function handleEdit() {
@@ -184,6 +195,15 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
     setIsOpen((i) => !i);
   }
 
+  function handlePin() {
+    let index = notes.indexOf(note);
+    let editedNote = notes[index];
+    editedNote.pinned = !editedNote.pinned;
+    let newNotes = notes.slice();
+    newNotes[index] = editedNote;
+    setNotes(newNotes);
+  }
+
   return (
     <>
       <Modal
@@ -192,6 +212,8 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
         isOpen={isOpen}
         modalTitle={lang == "en" ? "Edit Note" : "تعديل المذكرة"}
         handleEdit={handleEdit}
+        cancelButton={lang == "en" ? "Cancel" : "إلغاء"}
+        confirmButton={lang == "en" ? "Save" : "حفظ"}
       >
         <form ref={form}>
           <div className="my-6">
@@ -278,6 +300,23 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
           </div>
         </form>
       </Modal>
+      <Modal
+        lang={lang}
+        toggleModal={toggleModalDelete}
+        isOpen={isDeleteOpen}
+        modalTitle={
+          lang == "en" ? "Confirm delete note!" : "!تأكيد حذف المذكرة"
+        }
+        handleEdit={handleCheckRemove}
+        cancelButton={lang == "en" ? "Cancel" : "إلغاء"}
+        confirmButton={lang == "en" ? "Delete" : "حذف"}
+      >
+        <p className="my-4 text-base md:text-lg lg:text-xl">
+          {lang == "en"
+            ? "Are you sure you want to delete this note?"
+            : "هل أنت متأكد من حذف هذه المذكرة؟"}
+        </p>
+      </Modal>
       {success}
       {error}
       <div
@@ -292,6 +331,48 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
                 : `${lang == "en" ? "Without title" : "بدون عنوان"}`}
             </span>
             <div className="flex">
+              <button
+                className={`p-2 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                  pinned ? "text-blue-500" : "text-gray-600 dark:text-gray-300"
+                }`}
+                onClick={handlePin}
+              >
+                {!pinned ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-6 cursor-pointer"
+                  >
+                    <line x1="12" x2="12" y1="17" y2="22"></line>
+                    <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-6"
+                  >
+                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                    <line x1="12" x2="12" y1="17" y2="22"></line>
+                    <path d="M9 9v1.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17h12"></path>
+                    <path d="M15 9.34V6h1a2 2 0 0 0 0-4H7.89"></path>
+                  </svg>
+                )}
+              </button>
               <button
                 onClick={toggleModal}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -313,7 +394,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
               </button>
               <button
                 className="p-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-                onClick={handleRemove}
+                onClick={toggleModalDelete}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -457,7 +538,11 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
             )}
           </div>
         </div>
-        <p className="text-gray-600 text-lg border-b dark:border-gray-700 pt-6 pb-6 md:text-xl dark:text-gray-300  whitespace-pre-line leading-loose">
+        <p
+          className={`text-gray-600 text-lg ${
+            notes.length == 1 ? "" : "border-b pb-6"
+          }  dark:border-gray-700 pt-6  md:text-xl dark:text-gray-300  whitespace-pre-line leading-loose`}
+        >
           {noteTxt}
         </p>
         <div className="flex justify-between items-center flex-row-reverse pt-6 pb-3">

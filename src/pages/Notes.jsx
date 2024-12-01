@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { convertDate } from "../App";
-import Note from "../components/Note";
 import { Link } from "react-router-dom";
 import DayNotes from "../components/DayNotes";
 import { DayPicker } from "react-day-picker";
@@ -164,16 +162,39 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  className="lucide lucide-calendar absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-500 dark:text-blue-400 pointer-events-none"
+                  className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-500 dark:text-blue-400 pointer-events-none"
                 >
                   <path d="M8 2v4"></path>
                   <path d="M16 2v4"></path>
                   <rect width="18" height="18" x="3" y="4" rx="2"></rect>
                   <path d="M3 10h18"></path>
                 </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className={`size-6 absolute right-3 rtl:right-auto rtl:left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-500 dark:text-blue-400 cursor-pointer opacity-0 transition-all pointer-events-none ${
+                    selectedDate ? "pointer-events-auto opacity-100" : ""
+                  }`}
+                  onClick={() => setSelectedDate()}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z"
+                  />
+                </svg>
               </div>
             </div>
           </div>
+          {/* <span
+            className={`w-fit px-4 py-2 rounded-lg shadow-lg bg-blue-400 block `}
+            onClick={() => setCurrentCategory("")}
+          >
+            {lang == "en" ? "Pinned Notes" : "المذكرات المثبتة"}
+          </span> */}
           {Object.keys(categories).length !== 0 && (
             <div className="flex gap-x-3 animate-fade-in-up opacity-0 flex-wrap gap-y-4">
               <span
@@ -191,9 +212,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                       background: isDark
                         ? categories[cat].dark.background
                         : categories[cat].light.background,
-                      color: isDark
-                        ? categories[cat].dark.text
-                        : categories[cat].light.text,
+                      color: isDark ? "" : categories[cat].light.text,
                       borderColor: isDark
                         ? categories[cat].dark.border
                         : categories[cat].light.border,
@@ -203,7 +222,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                         ? setCurrentCategory(cat)
                         : setCurrentCategory("")
                     }
-                    className={`text-xs md:text-sm  w-fit flex items-center gap-2 dark:text-gray-300 rounded-full px-3 py-1 outline-2 cursor-pointer border ${
+                    className={`text-xs md:text-sm  w-fit flex items-center gap-2 dark:text-gray-100 rounded-full px-3 py-1 outline-2 cursor-pointer border ${
                       currentCategory == cat ? "scale-105 outline" : ""
                     } transition-transform shadow-sm`}
                     key={cat}
@@ -233,7 +252,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               })}
             </div>
           )}
-          <div className="flex gap-4 justify-center flex-wrap">
+          <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 lg:flex lg:flex-row gap-4 justify-center flex-wrap">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse  max-w-full gap-4">
               <div className="p-2 bg-gray-50  dark:bg-gray-700 rounded-lg">
                 <svg
@@ -260,7 +279,20 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4">
+            <div
+              className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer ${
+                new Date(selectedDate).toLocaleDateString() ==
+                new Date().toLocaleDateString()
+                  ? "bg-slate-200 dark:bg-slate-700 "
+                  : ""
+              }`}
+              onClick={() =>
+                new Date(selectedDate).toLocaleDateString() !=
+                new Date().toLocaleDateString()
+                  ? setSelectedDate(new Date())
+                  : setSelectedDate()
+              }
+            >
               <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -316,6 +348,35 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 </div>
               </div>
             </div>
+            <Link to="/saved">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-orange-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-6 cursor-pointer"
+                  >
+                    <line x1="12" x2="12" y1="17" y2="22"></line>
+                    <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {notes.filter((n) => n.pinned).length}
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {lang == "en" ? "Pinned Notes" : "المذكرات المثبتة"}
+                  </div>
+                </div>
+              </div>
+            </Link>
           </div>
           {uniqueDates.length != 0 ? (
             uniqueDates.reverse().map((uniqueDate) => {
