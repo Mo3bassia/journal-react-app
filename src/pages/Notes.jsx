@@ -347,7 +347,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 </div>
               </div>
             </div>
-            <Link to="/saved">
+            <Link to="/pinned">
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
                 <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-orange-600">
                   <svg
