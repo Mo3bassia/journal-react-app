@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import Note from "../components/Note";
 
 function Pinned({ lang, isDark, notes, setSelected }) {
-  let notesOfDate = notes;
-  notesOfDate.reverse().sort((a, b) => b.id - a.id);
+  let notesOfDate = [...notes];
+  notesOfDate.sort((a, b) => b.id - a.id);
 
   useEffect(function () {
     setSelected("Pinned");

@@ -69,7 +69,7 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
           if (insertIndex === -1) {
             editedNotes.push(editedNote);
           } else {
-            editedNotes.splice(insertIndex, 0, editedNote);
+            editedNotes.splice(notes.length, 0, editedNote);
           }
           
           setNotes(editedNotes);
@@ -119,9 +119,9 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
     });
   }
 
-  notesOfDate.reverse().sort((a, b) => b.id - a.id);
+  // نعمل نسخة من المصفوفة قبل الترتيب
+  const sortedNotes = [...notesOfDate].sort((a, b) => b.id - a.id);
 
-  // console.log(notesOfDate);
   return (
     <>
       {success}
@@ -141,7 +141,7 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
                 : convertDate(uniqueDate)[1]}
             </Link>
           </h2>
-          {notesOfDate.map((note) => {
+          {sortedNotes.map((note) => {
             return (
               <Note
                 key={note.id}

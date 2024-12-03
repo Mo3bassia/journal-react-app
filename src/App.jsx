@@ -221,7 +221,7 @@ function App() {
                 />
               );
             })}
-            {uniqueDates.reverse().map((uniqueDate) => {
+            {[...uniqueDates].reverse().map((uniqueDate) => {
               const notesOfDate = notes.filter(
                 (note) => note.date === uniqueDate
               );
@@ -237,7 +237,7 @@ function App() {
                             ? convertDate(uniqueDate)[0].toDateString()
                             : convertDate(uniqueDate)[1]}
                         </h1>
-                        {notesOfDate.reverse().map((note) => {
+                        {[...notesOfDate].reverse().map((note) => {
                           return (
                             <Note
                               key={note.id}
