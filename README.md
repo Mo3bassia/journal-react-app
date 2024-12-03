@@ -1,16 +1,41 @@
 # Journal App 📝
 
+> **Visit the live site: [Journal React App](https://journal-mo3bassias-projects.vercel.app/)**
+
 A bilingual (English/Arabic) journaling application built with React that allows users to capture their daily thoughts, memories, and experiences.
+
+## 📸 Screenshots
+
+### Light/Dark Mode - الوضع النهاري/الليلي
+<div align="center">
+  <img src="screenshots/main-light-en.png" alt="Light Mode - English" width="45%">
+  <img src="screenshots/main-dark-ar.png" alt="Dark Mode - Arabic" width="45%">
+</div>
+
+### Features Preview - معاينة المميزات
+
+| Feature | English | العربية |
+|---------|---------|----------|
+| 📝 Add New Note / إضافة مذكرة | <img src="screenshots/features/add-note-en.png" width="100%"> | <img src="screenshots/features/add-note-ar.png" width="100%"> |
+| 📌 Pinned Notes / المثبتة | <img src="screenshots/features/pinned-en.png" width="100%"> | <img src="screenshots/features/pinned-ar.png" width="100%"> |
+| 🔍 Search & Categories / البحث والتصنيفات | <img src="screenshots/features/search-en.png" width="100%"> | <img src="screenshots/features/search-ar.png" width="100%"> |
+| 🏷️ Categories / التصنيفات | <img src="screenshots/features/categories-en.jpg" width="100%"> | <img src="screenshots/features/categories-ar.jpg" width="100%"> |
+
+### Mobile View - عرض الموبايل
+<div align="center">
+  <img src="screenshots/mobile/responsive-en.png" alt="Mobile View - English" width="300px">
+  <img src="screenshots/mobile/responsive-ar.png" alt="Mobile View - Arabic" width="300px">
+</div>
 
 ## ✨ Features
 
-- **Bilingual Support**: Full support for both English and Arabic languages
+- **Bilingual Support**: with customizable categories
+- **Pin Important Notes**: Keep crucial notes easily accessible
+- **Date Navigation**: Browse Full support for both English and Arabic languages
 - **Dark/Light Mode**: Customizable theme preference
 - **Rich Text Notes**: Create, edit, and organize your thoughts
 - **Mood Tracking**: Express your feelings with emoji-based mood indicators
-- **Categories**: Organize notes with customizable categories
-- **Pin Important Notes**: Keep crucial notes easily accessible
-- **Date Navigation**: Browse notes by date with an interactive calendar
+- **Categories**: Organize notes notes by date with an interactive calendar
 - **PWA Support**: Install as a Progressive Web App for offline access
 - **Local Storage**: All data is stored locally for privacy
 
@@ -37,13 +62,13 @@ The project uses multiple icon libraries for a rich user interface:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/journal-app.git
+git clone https://github.com/Mo3bassia/journal-react-app.git
 ```
 
 2. Install dependencies:
 
 ```bash
-cd journal-app
+cd journal-react-app
 npm install
 ```
 
