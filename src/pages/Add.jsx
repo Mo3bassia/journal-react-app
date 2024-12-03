@@ -31,30 +31,39 @@ function Add({ lang, setSelected, setNotes }) {
     inputs.forEach((input, index) => {
       if (input.required) {
         if (input.value) {
-          setNotes((n) => {
-            setSuccess(
-              <SuccessAlert
-                lang={lang}
-                title={
-                  lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"
-                }
-                message={
-                  lang == "en"
-                    ? "You have successfully added your note."
-                    : "لقد قمت بالتو بإضافة مذكرات اخري!"
-                }
-                timeForMsg={timeForMsg}
-              />
-            );
-            if (!success) {
-              setTimeout(() => {
-                setSuccess("");
-              }, timeForMsg);
-            }
+          setSuccess(
+            <SuccessAlert
+              lang={lang}
+              title={
+                lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"
+              }
+              message={
+                lang == "en"
+                  ? "You have successfully added your note."
+                  : "لقد قمت بالتو بإضافة مذكرات اخري!"
+              }
+              timeForMsg={timeForMsg}
+            />
+          );
+          if (!success) {
+            setTimeout(() => {
+              setSuccess("");
+            }, timeForMsg);
+          }
 
+          setCategory("");
+          setNote("");
+          setTitle("");
+          inputs[0].focus();
+          setNotes((n) => {
             const newObj = {
               id: n.length + 1,
-              title: title || lang == "en" ? "No title" : "بدون عنوان",
+              title:
+                title == ""
+                  ? lang == "en"
+                    ? "No title"
+                    : "بدون عنوان"
+                  : title,
               category,
               note: note,
               emoji: mood,
@@ -72,14 +81,9 @@ function Add({ lang, setSelected, setNotes }) {
                   }
                 })
                 .filter((m) => m != null)[0],
-              date: date.toLocaleDateString(),
-              time: date.toLocaleTimeString(),
+              date: date.toLocaleDateString("en-US"),
+              time: date.toLocaleTimeString("en-US"),
             };
-
-            setCategory("");
-            setNote("");
-            setTitle("");
-            inputs[0].focus();
             return [...n, newObj];
           });
         } else {

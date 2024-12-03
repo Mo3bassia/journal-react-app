@@ -46,7 +46,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   }
   if (selectedDate) {
     notesFiltered = notesFiltered.filter((n) => {
-      return n.date === selectedDate.toLocaleDateString();
+      return n.date === selectedDate.toLocaleDateString("en-US");
     });
   }
 
@@ -150,7 +150,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                   readOnly
                   type="text"
                   className="w-full py-2 px-10 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                  value={selectedDate?.toLocaleDateString() || ""}
+                  value={selectedDate?.toLocaleDateString("en-US") || ""}
                   placeholder={`${
                     lang == "en" ? "Select date" : "اختر التاريخ"
                   }`}
@@ -282,14 +282,14 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
             </div>
             <div
               className={`  rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer ${
-                new Date(selectedDate).toLocaleDateString() ==
-                new Date().toLocaleDateString()
+                new Date(selectedDate).toLocaleDateString("en-US") ==
+                new Date().toLocaleDateString("en-US")
                   ? "bg-slate-200 dark:bg-slate-700 "
                   : "bg-white dark:bg-gray-800  "
               }`}
               onClick={() =>
-                new Date(selectedDate).toLocaleDateString() !=
-                new Date().toLocaleDateString()
+                new Date(selectedDate).toLocaleDateString("en-US") !=
+                new Date().toLocaleDateString("en-US")
                   ? setSelectedDate(new Date())
                   : setSelectedDate()
               }
@@ -314,7 +314,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
                   {
                     notes.filter(
-                      (d) => d.date == new Date().toLocaleDateString()
+                      (d) => d.date == new Date().toLocaleDateString("en-US")
                     ).length
                   }
                 </div>

@@ -144,7 +144,6 @@ function App() {
   const [lang, setLanguage] = useLocalStorage("ar", "lang");
   const [notes, setNotes] = useLocalStorage([], "notes");
   const [selected, setSelected] = useState("");
-  const password = import.meta.env.VITE_PASSWORD;
 
   let allDates = [];
   notes.map((note) => {

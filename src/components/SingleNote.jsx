@@ -153,8 +153,8 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
       title != titleTxt ||
       mood != emoji
     ) {
-      editedNote.lastEditDate = date.toLocaleDateString();
-      editedNote.lastEditTime = date.toLocaleTimeString();
+      editedNote.lastEditDate = date.toLocaleDateString("en-US");
+      editedNote.lastEditTime = date.toLocaleTimeString("en-US");
 
       setSuccess(
         <SuccessAlert

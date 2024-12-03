@@ -59,11 +59,11 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
                 }
               })
               .filter((m) => m != null)[0],
-            date: date.toLocaleDateString(),
-            time: new Date().toLocaleTimeString(),
+            date: date.toLocaleDateString("en-US"),
+            time: new Date().toLocaleTimeString("en-US"),
             addedLater:
-              new Date().toLocaleDateString() !=
-              new Date(uniqueDate).toLocaleDateString(),
+              new Date().toLocaleDateString("en-US") !=
+              new Date(uniqueDate).toLocaleDateString("en-US"),
           };
           let firstPart = [];
           firstPart = notes.slice(0, index + 1);

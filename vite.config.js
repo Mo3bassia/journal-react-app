@@ -40,7 +40,7 @@ export default defineConfig({
       },
       manifest: {
         name: "Journal",
-        short_name: "JOR",
+        short_name: "Journal",
         description:
           "Journal is a personal and intuitive web app designed to help you capture your daily thoughts, memories, and reflections. With a simple and modern interface, it offers a private space to document your journey anytime, anywhere. ✨",
         theme_color: "#3b82f6",
