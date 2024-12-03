@@ -34,9 +34,8 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
       if (input.required) {
         if (input.value) {
           let date = new Date(uniqueDate);
-          const notesForThisDate = notes.filter((n) => n.date === uniqueDate);
-          const lastId = notesForThisDate.length > 0 
-            ? Math.max(...notesForThisDate.map(n => n.id))
+          const lastId = notes.length > 0 
+            ? Math.max(...notes.map(n => n.id))
             : 0;
           
           let editedNote = {
