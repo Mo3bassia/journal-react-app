@@ -34,13 +34,13 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
       if (input.required) {
         if (input.value) {
           let date = new Date(uniqueDate);
-          let index = notes.indexOf(
-            notes.filter((n) => n.date == uniqueDate)[
-              notes.filter((n) => n.date == uniqueDate).length - 1
-            ]
-          );
+          const notesForThisDate = notes.filter((n) => n.date === uniqueDate);
+          const lastId = notesForThisDate.length > 0 
+            ? Math.max(...notesForThisDate.map(n => n.id))
+            : 0;
+          
           let editedNote = {
-            id: index + 2,
+            id: lastId + 1,
             title: titleTxt,
             category: categoryTxt,
             note: noteVal,
@@ -65,17 +65,14 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
               new Date().toLocaleDateString("en-US") !=
               new Date(uniqueDate).toLocaleDateString("en-US"),
           };
-          let firstPart = [];
-          firstPart = notes.slice(0, index + 1);
-          firstPart.push(editedNote);
-          let secondPart = [];
-          secondPart = notes.slice(index + 1, notes.length);
-          secondPart = secondPart.map((n) => {
-            n.id += 1;
-            return n;
-          });
-          let editedNotes = [...firstPart, ...secondPart];
-          // console.log(editedNotes);
+          let editedNotes = [...notes];
+          const insertIndex = editedNotes.findIndex(n => n.date === uniqueDate);
+          if (insertIndex === -1) {
+            editedNotes.push(editedNote);
+          } else {
+            editedNotes.splice(insertIndex, 0, editedNote);
+          }
+          
           setNotes(editedNotes);
           setIsOpen((i) => !i);
 

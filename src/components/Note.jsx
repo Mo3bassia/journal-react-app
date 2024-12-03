@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { convertDate } from "../App";
-import CloseIcon from "./CloseIcon";
 import { colors } from "../App";
 
 function Note({ lang, note, notes, isDark }) {
