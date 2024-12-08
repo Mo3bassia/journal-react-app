@@ -1,4 +1,4 @@
-# Journal App 📝
+# Journal App 📝 (v1.5.0)
 
 > **Visit the live site: [Journal React App](https://journal-mo3bassias-projects.vercel.app/)**
 
@@ -27,6 +27,23 @@ A bilingual (English/Arabic) journaling application built with React that allows
   <img src="screenshots/mobile/responsive-ar.png" alt="Mobile View - Arabic" width="300px">
 </div>
 
+## 📝 Changelog
+
+### v1.5.0
+- Added Backup & Restore functionality
+- Fixed future dates note creation bug
+- Added Back to Top button for better navigation
+- General bug fixes and improvements
+
+### v1.0.0
+- Initial release
+- Bilingual support (English/Arabic)
+- Rich text notes with mood tracking
+- Dark/Light mode
+- Categories and pin functionality
+- PWA support
+- Local storage implementation
+
 ## ✨ Features
 
 - **Bilingual Support**: with customizable categories
@@ -38,6 +55,8 @@ A bilingual (English/Arabic) journaling application built with React that allows
 - **Categories**: Organize notes notes by date with an interactive calendar
 - **PWA Support**: Install as a Progressive Web App for offline access
 - **Local Storage**: All data is stored locally for privacy
+- **Backup & Restore**: Import and export your notes for safekeeping
+- **Back to Top**: Quick navigation for better user experience
 
 ## 🚀 Tech Stack
 
