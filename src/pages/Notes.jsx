@@ -40,9 +40,9 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   let notesFiltered;
 
   if (currentCategory === "") {
-    notesFiltered = notes;
+    notesFiltered = [...notes];
   } else {
-    notesFiltered = notes.filter((n) => n.category === currentCategory);
+    notesFiltered = [...notes].filter((n) => n.category === currentCategory);
   }
   if (selectedDate) {
     notesFiltered = notesFiltered.filter((n) => {

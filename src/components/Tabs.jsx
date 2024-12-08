@@ -71,7 +71,7 @@ function Tabs({ lang, selected, setSelected }) {
           <input
             type="radio"
             name="radio"
-            value={"Notes"}
+            value={"Pinned"}
             checked={selected === "Pinned"}
             onChange={handleChange}
             className="hidden"
@@ -86,6 +86,34 @@ function Tabs({ lang, selected, setSelected }) {
               transition-all ease-in-out`}
           >
             {lang == "en" ? "Pinned" : "المثبتة"}
+          </span>
+        </label>
+      </NavLink>
+
+      <NavLink
+        to="/backup"
+        className="radio flex-1 text-center w-28 sm:w-32"
+        onClick={() => setSelected("backup")}
+      >
+        <label className="radio flex-1 text-center">
+          <input
+            type="radio"
+            name="radio"
+            value={"backup"}
+            checked={selected === "backup"}
+            onChange={handleChange}
+            className="hidden"
+          />
+          <span
+            className={`name cursor-pointer flex items-center justify-center rounded-lg py-2 px-0 
+              ${
+                selected === "backup"
+                  ? "bg-blue-500 text-white font-semibold dark:bg-blue-800 dark:text-white"
+                  : "text-gray-800 dark:text-gray-300"
+              } 
+              transition-all ease-in-out`}
+          >
+            {lang == "en" ? "Backup" : "النسخ"}
           </span>
         </label>
       </NavLink>

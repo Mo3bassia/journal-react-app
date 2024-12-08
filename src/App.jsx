@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Add from "./pages/Add";
@@ -12,6 +11,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Pinned from "./pages/Pinned.jsx";
 import Home from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
+import Backup from "./pages/Backup.jsx";
 
 export const colors = [
   {
@@ -144,6 +144,7 @@ function App() {
   const [lang, setLanguage] = useLocalStorage("ar", "lang");
   const [notes, setNotes] = useLocalStorage([], "notes");
   const [selected, setSelected] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   let allDates = [];
   notes.map((note) => {
@@ -153,12 +154,26 @@ function App() {
   useEffect(() => {
     if (isDark) document.body.classList.add("dark");
     document.documentElement.lang = lang;
+
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lang, isDark]);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const uniqueDates = [...new Set(allDates)];
 
   return (
-    <div className="min-h-screen  bg-gray-50 text-gray-900 dark:bg-[#1a1f2b] dark:text-white flex flex-col">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1a1f2b] dark:text-white flex flex-col">
       <BrowserRouter>
         <Navbar setLanguage={setLanguage} lang={lang} setIsDark={setIsDark} />
         <Tabs lang={lang} selected={selected} setSelected={setSelected} />
@@ -178,7 +193,7 @@ function App() {
                   notes={notes}
                 />
               }
-            ></Route>
+            />
             <Route
               path="add"
               element={
@@ -198,6 +213,18 @@ function App() {
                   lang={lang}
                   notes={notes}
                   setSelected={setSelected}
+                />
+              }
+            />
+            <Route
+              path="/backup"
+              element={
+                <Backup
+                  setSelected={setSelected}
+                  lang={lang}
+                  isDark={isDark}
+                  setNotes={setNotes}
+                  notes={notes}
                 />
               }
             />
@@ -259,6 +286,33 @@ function App() {
         </main>
         <Footer lang={lang} notes={notes} />
       </BrowserRouter>
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className={`fixed bottom-4 ${
+            lang === "ar" ? "right-4" : "left-4"
+          } px-3 py-2 rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
+            isDark ? "bg-blue-700 text-white" : "bg-blue-500 text-white"
+          } opacity-50 hover:opacity-100`}
+          aria-label={lang === "ar" ? "العودة للأعلى" : "Back to top"}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+          <span className="text-sm font-semibold"></span>
+        </button>
+      )}
     </div>
   );
 }

@@ -135,6 +135,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
   }
 
   function handleEdit() {
+    console.log("Mo")
     let index = notes.indexOf(note);
     let editedNote = notes[notes.indexOf(note)];
     let date = new Date();

@@ -28,98 +28,82 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
   };
 
   function handleEdit() {
-    const inputs = form.current.querySelectorAll("input[type=text], textarea");
+    if (!noteVal) {
+      setError(
+        <ErrorAlert
+          lang={lang}
+          title={lang == "en" ? "Failed to Add Note." : "فشلت الاضافة للمذكرة."}
+          message={
+            lang == "en"
+              ? "Please fill out all required fields."
+              : "يرجى ملء الحقول المطلوبة."
+          }
+          timeForMsg={timeForMsg}
+        />
+      );
+      setTimeout(() => {
+        setError("");
+      }, timeForMsg);
+      return;
+    }
 
-    inputs.forEach((input, index) => {
-      if (input.required) {
-        if (input.value) {
-          let date = new Date(uniqueDate);
-          const lastId = notes.length > 0 
-            ? Math.max(...notes.map(n => n.id))
-            : 0;
-          
-          let editedNote = {
-            id: lastId + 1,
-            title: titleTxt,
-            category: categoryTxt,
-            note: noteVal,
-            emoji: mood,
-            moodAr: Object.values(moods["ar"])
-              .map((m, index) => {
-                if (m == mood) {
-                  return Object.keys(moods["ar"])[index];
-                }
-              })
-              .filter((m) => m != null)[0],
-            moodEn: Object.values(moods["en"])
-              .map((m, index) => {
-                if (m == mood) {
-                  return Object.keys(moods["en"])[index];
-                }
-              })
-              .filter((m) => m != null)[0],
-            date: date.toLocaleDateString("en-US"),
-            time: new Date().toLocaleTimeString("en-US"),
-            addedLater:
-              new Date().toLocaleDateString("en-US") !=
-              new Date(uniqueDate).toLocaleDateString("en-US"),
-          };
-          let editedNotes = [...notes];
-          const insertIndex = editedNotes.findIndex(n => n.date === uniqueDate);
-          if (insertIndex === -1) {
-            editedNotes.push(editedNote);
-          } else {
-            editedNotes.splice(notes.length, 0, editedNote);
+    // Create the new note
+    const date = new Date(uniqueDate);
+    const lastId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0;
+    
+    const editedNote = {
+      id: lastId + 1,
+      title: titleTxt || (lang == "en" ? "No title" : "بدون عنوان"),
+      category: categoryTxt,
+      note: noteVal,
+      emoji: mood,
+      moodAr: Object.values(moods["ar"])
+        .map((m, index) => {
+          if (m == mood) {
+            return Object.keys(moods["ar"])[index];
           }
-          
-          setNotes(editedNotes);
-          setIsOpen((i) => !i);
+        })
+        .filter((m) => m != null)[0],
+      moodEn: Object.values(moods["en"])
+        .map((m, index) => {
+          if (m == mood) {
+            return Object.keys(moods["en"])[index];
+          }
+        })
+        .filter((m) => m != null)[0],
+      date: date.toLocaleDateString("en-US"),
+      time: new Date().toLocaleTimeString("en-US"),
+      addedLater:
+        new Date().toLocaleDateString("en-US") !=
+        new Date(uniqueDate).toLocaleDateString("en-US"),
+    };
 
-          setSuccess(
-            <SuccessAlert
-              lang={lang}
-              title={
-                lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"
-              }
-              message={
-                lang == "en"
-                  ? "You have successfully added your note."
-                  : "لقد قمت بالتو بإضافة مذكرات اخري!"
-              }
-              timeForMsg={timeForMsg}
-            />
-          );
-          if (!success) {
-            setTimeout(() => {
-              setSuccess("");
-            }, timeForMsg);
-          }
-        } else {
-          setError(
-            <ErrorAlert
-              lang={lang}
-              title={
-                lang == "en" ? "Failed to Add Note." : "فشلت الاضافة للمذكرة."
-              }
-              message={
-                lang == "en"
-                  ? "Please fill out all required fields."
-                  : "يرجى ملء الحقول المطلوبة."
-              }
-              timeForMsg={timeForMsg}
-            />
-          );
-          if (!error) {
-            setTimeout(() => {
-              setError("");
-            }, timeForMsg);
-          }
+    setNotes([...notes, editedNote]);
+    
+    setTitle("");
+    setCategory("");
+    setNote("");
+    setMood("");
+    setIsOpen(false);
+
+    setSuccess(
+      <SuccessAlert
+        lang={lang}
+        title={lang == "en" ? "Successfully Added." : "تمت الإضافة بنجاح!"}
+        message={
+          lang == "en"
+            ? "You have successfully added your note."
+            : "لقد قمت بالتو بإضافة مذكرات اخري!"
         }
-      }
-    });
+        timeForMsg={timeForMsg}
+      />
+    );
+
+    setTimeout(() => {
+      setSuccess("");
+    }, timeForMsg);
   }
 
-  // نعمل نسخة من المصفوفة قبل الترتيب
   const sortedNotes = [...notesOfDate].sort((a, b) => b.id - a.id);
 
   return (

@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Light mode scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #111827; /* أغمق */
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1f2937; /* أغمق */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #374151; /* أغمق */
+}

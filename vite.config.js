@@ -7,32 +7,33 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: 'prompt',
       devOptions: {
-        enabled: true, // لتفعيل الـ PWA أثناء التطوير
+        enabled: true,
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,jpg,svg}"],
         runtimeCaching: [
           {
-            urlPattern: /^https?.*/, // جميع الملفات اللي بتيجي من HTTP/HTTPS
-            handler: "CacheFirst", // يحاول الشبكة أولًا، ولو فشل يستخدم الكاش
+            urlPattern: /^https?.*/, 
+            handler: "NetworkFirst",
             options: {
               cacheName: "dynamic-cache",
               expiration: {
-                maxEntries: 50, // أقصى عدد من الملفات اللي هيتم تخزينها
-                maxAgeSeconds: 7 * 24 * 60 * 60, // أسبوع واحد
+                maxEntries: 50,
+                maxAgeSeconds: 7 * 24 * 60 * 60,
               },
+              networkTimeoutSeconds: 10,
             },
           },
           {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/, // الكاش للصور
-            handler: "CacheFirst", // يخزن الصور مباشرة في الكاش
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+            handler: "CacheFirst",
             options: {
               cacheName: "image-cache",
               expiration: {
-                maxEntries: 100, // أقصى عدد من الصور
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 يوم
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
               },
             },
           },
@@ -48,11 +49,6 @@ export default defineConfig({
           {
             src: "/logo192.png",
             sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/logo512.png",
-            sizes: "512x512",
             type: "image/png",
           },
         ],
