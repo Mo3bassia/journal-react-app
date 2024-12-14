@@ -358,7 +358,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
   // Calculate notes status statistics
   const pinnedNotes = notes.filter(note => note.pinned).length;
   const editedNotes = notes.filter(note => note.lastEditDate !== '').length;
-  const scheduledNotes = notes.filter(note => note.scheduled).length;
+  const scheduledNotes = notes.filter(note => note.addedLater).length;
 
   return (
     <div className="container opacity-0 animate-fade-in-up mx-auto px-4 py-8 animate-fade-in">
