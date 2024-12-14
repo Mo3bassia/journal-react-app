@@ -44,7 +44,18 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
   const handleRestore = () => {
     try {
       const parsedData = JSON.parse(inputData);
-      if (Array.isArray(parsedData)) {
+      
+      // التحقق من أن البيانات عبارة عن مصفوفة وكل عنصر فيها يحتوي على الحقول المطلوبة
+      if (Array.isArray(parsedData) && parsedData.every(note => 
+        typeof note === 'object' && note !== null &&
+        'id' in note &&
+        'title' in note &&
+        'note' in note &&
+        'date' in note &&
+        'emoji' in note &&
+        'moodAr' in note &&
+        'moodEn' in note
+      )) {
         setNotes(parsedData);
         setError('');
         const successMessage = (
@@ -70,11 +81,11 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
         const errorMessage = (
           <ErrorAlert
             lang={lang}
-            title={lang === 'en' ? 'Invalid Data' : 'بيانات غير صالحة'}
+            title={lang === 'en' ? 'Invalid Data Structure' : 'هيكل بيانات غير صالح'}
             message={
               lang === 'en'
-                ? 'Please provide valid journal data'
-                : 'يرجى تقديم بيانات صالحة للمذكرات'
+                ? 'The data structure is not valid. Please make sure you are using a valid journal backup.'
+                : 'هيكل البيانات غير صالح. يرجى التأكد من استخدام نسخة احتياطية صالحة للمذكرات.'
             }
             timeForMsg={timeForMsg}
           />
@@ -90,11 +101,11 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
       const errorMessage = (
         <ErrorAlert
           lang={lang}
-          title={lang === 'en' ? 'Invalid Format' : 'تنسيق غير صالح'}
+          title={lang === 'en' ? 'Invalid JSON Format' : 'تنسيق JSON غير صالح'}
           message={
             lang === 'en'
-              ? 'Please provide valid JSON data'
-              : 'يرجى تقديم بيانات JSON صالحة'
+              ? 'The data is not in a valid JSON format. Please check your input.'
+              : 'البيانات ليست بتنسيق JSON صالح. يرجى التحقق من المدخلات.'
           }
           timeForMsg={timeForMsg}
         />

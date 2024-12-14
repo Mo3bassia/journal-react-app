@@ -28,15 +28,15 @@ function Note({ lang, note, notes, isDark, viewMode }) {
   });
 
   return (
-    <Link to={`/note/${id}`} className="block relative">
-      <div
-        key={id}
-        className={`select-none transition-all duration-200 ease-in-out cursor-pointer p-4 rounded-lg shadow-md
+    <Link to={`/note/${id}`} className="block relative select-none transition-all duration-200 ease-in-out cursor-pointer p-4 rounded-lg shadow-md
         bg-gradient-to-br from-slate-50 via-white to-blue-50
         hover:from-blue-50 hover:via-indigo-50 hover:to-purple-50
         dark:from-[#1a1f2c] dark:via-[#1e2433] dark:to-[#232936]
         dark:hover:from-[#1e2433] dark:hover:via-[#232936] dark:hover:to-[#2a3241]
-        border border-gray-100 dark:border-gray-700 ${viewMode === 'list' ? 'flex flex-col' : ''}`}
+        border border-gray-100 dark:border-gray-700">
+      <div
+        key={id}
+        className={` ${viewMode === 'list' ? 'flex flex-col' : ''}`}
       >
         {
           <h2 className="text-xl md:text-2xl flex items-center justify-between text-gray-900 dark:text-white mb-2 font-bold mt-2 flex-wrap gap-y-3">

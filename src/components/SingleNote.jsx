@@ -324,7 +324,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
         key={id}
         className="transition-all duration-300 ease-in-out p-4 rounded-2xl shadow-lg
         bg-gradient-to-br from-slate-50 via-white to-blue-50/80
-        hover:from-blue-50 hover:via-indigo-50/90 hover:to-purple-50
+        
         dark:from-[#1a1f2c] dark:via-[#1e2433] dark:to-[#232936]
         border border-gray-100/50 dark:border-gray-700/50
         animate-fade-in-up opacity-0 [animation-fill-mode:forwards]"

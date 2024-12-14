@@ -12,6 +12,7 @@ import Pinned from "./pages/Pinned.jsx";
 import Home from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import Backup from "./pages/Backup.jsx";
+import Statistics from "./pages/Statistics.jsx";
 
 export const colors = [
   {
@@ -221,13 +222,16 @@ function App() {
                 path="/backup"
                 element={
                   <Backup
-                    setSelected={setSelected}
                     lang={lang}
-                    isDark={isDark}
-                    setNotes={setNotes}
                     notes={notes}
+                    setNotes={setNotes}
+                    setSelected={setSelected}
                   />
                 }
+              />
+              <Route
+                path="/statistics"
+                element={<Statistics setSelected={setSelected} lang={lang} notes={notes} isDark={isDark} />}
               />
               {notes.map((note) => {
                 return (

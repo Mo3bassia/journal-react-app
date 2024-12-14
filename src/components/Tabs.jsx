@@ -89,7 +89,33 @@ function Tabs({ lang, selected, setSelected }) {
           </span>
         </label>
       </NavLink>
-
+      <NavLink
+        to="/statistics"
+        className="radio flex-1 text-center w-28 sm:w-32"
+        onClick={() => setSelected("statistics")}
+      >
+        <label className="radio flex-1 text-center">
+          <input
+            type="radio"
+            name="radio"
+            value={"statistics"}
+            checked={selected === "statistics"}
+            onChange={handleChange}
+            className="hidden"
+          />
+          <span
+            className={`name px-2 cursor-pointer flex items-center justify-center rounded-lg py-2 px-0 
+              ${
+                selected === "statistics"
+                  ? "bg-blue-500 text-white font-semibold dark:bg-blue-800 dark:text-white"
+                  : "text-gray-800 dark:text-gray-300"
+              } 
+              transition-all ease-in-out`}
+          >
+            {lang == "en" ? "Statistics" : "الإحصائيات"}
+          </span>
+        </label>
+      </NavLink>
       <NavLink
         to="/backup"
         className="radio flex-1 text-center w-28 sm:w-32"
@@ -117,6 +143,8 @@ function Tabs({ lang, selected, setSelected }) {
           </span>
         </label>
       </NavLink>
+      
+
     </div>
   );
 }

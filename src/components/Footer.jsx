@@ -169,6 +169,26 @@ function Footer({ lang, notes }) {
           <span>{lang === "en" ? "Backup" : "نسخة احتياطية"}</span>
         </Link>
       </li>
+      <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+        <Link to="/backup" className="flex gap-3 items-center">
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5 text-pink-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 12l2 2 4-4 6 6 8-8"
+        />
+      </svg>
+
+          <span>{lang === "en" ? "Statistics" : "الإحصائيات"}</span>
+        </Link>
+      </li>
     </>
   )}
 </ul>
