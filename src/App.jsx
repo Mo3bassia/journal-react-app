@@ -178,111 +178,113 @@ function App() {
         <Navbar setLanguage={setLanguage} lang={lang} setIsDark={setIsDark} />
         <Tabs lang={lang} selected={selected} setSelected={setSelected} />
         <main className="flex-grow ">
-          <Routes>
-            <Route
-              path="/"
-              element={<Home setSelected={setSelected} lang={lang} />}
-            />
-            <Route
-              path="/pinned"
-              element={
-                <Pinned
-                  isDark={isDark}
-                  setSelected={setSelected}
-                  lang={lang}
-                  notes={notes}
-                />
-              }
-            />
-            <Route
-              path="add"
-              element={
-                <Add
-                  setSelected={setSelected}
-                  lang={lang}
-                  setNotes={setNotes}
-                />
-              }
-            />
-            <Route
-              path="notes"
-              element={
-                <Notes
-                  isDark={isDark}
-                  setNotes={setNotes}
-                  lang={lang}
-                  notes={notes}
-                  setSelected={setSelected}
-                />
-              }
-            />
-            <Route
-              path="/backup"
-              element={
-                <Backup
-                  setSelected={setSelected}
-                  lang={lang}
-                  isDark={isDark}
-                  setNotes={setNotes}
-                  notes={notes}
-                />
-              }
-            />
-            {notes.map((note) => {
-              return (
-                <Route
-                  key={note.id}
-                  path={`/note/${note.id}`}
-                  element={
-                    <div className="container mx-auto">
-                      <SingleNote
-                        note={note}
-                        notes={notes}
-                        setSelected={setSelected}
-                        lang={lang}
-                        setNotes={setNotes}
-                        isDark={isDark}
-                      />
-                    </div>
-                  }
-                />
-              );
-            })}
-            {[...uniqueDates].reverse().map((uniqueDate) => {
-              const notesOfDate = notes.filter(
-                (note) => note.date === uniqueDate
-              );
-              return (
-                <Route
-                  key={uniqueDate}
-                  path={`/notes/${uniqueDate.split("/").join("-")}`}
-                  element={
-                    <div className="container animate-fade-in-up opacity-0 mx-auto px-4 md:px-6">
-                      <div className="space-y-6">
-                        <h1 className="text-4xl font-extrabold my-8">
-                          {lang == "en"
-                            ? convertDate(uniqueDate)[0].toDateString()
-                            : convertDate(uniqueDate)[1]}
-                        </h1>
-                        {[...notesOfDate].reverse().map((note) => {
-                          return (
-                            <Note
-                              key={note.id}
-                              note={note}
-                              lang={lang}
-                              isDark={isDark}
-                              notes={notes}
-                            />
-                          );
-                        })}
+          <div className="h-full w-full 2xl:w-[70%] 2xl:mx-auto">
+            <Routes>
+              <Route
+                path="/"
+                element={<Home setSelected={setSelected} lang={lang} />}
+              />
+              <Route
+                path="/pinned"
+                element={
+                  <Pinned
+                    isDark={isDark}
+                    setSelected={setSelected}
+                    lang={lang}
+                    notes={notes}
+                  />
+                }
+              />
+              <Route
+                path="add"
+                element={
+                  <Add
+                    setSelected={setSelected}
+                    lang={lang}
+                    setNotes={setNotes}
+                  />
+                }
+              />
+              <Route
+                path="notes"
+                element={
+                  <Notes
+                    isDark={isDark}
+                    setNotes={setNotes}
+                    lang={lang}
+                    notes={notes}
+                    setSelected={setSelected}
+                  />
+                }
+              />
+              <Route
+                path="/backup"
+                element={
+                  <Backup
+                    setSelected={setSelected}
+                    lang={lang}
+                    isDark={isDark}
+                    setNotes={setNotes}
+                    notes={notes}
+                  />
+                }
+              />
+              {notes.map((note) => {
+                return (
+                  <Route
+                    key={note.id}
+                    path={`/note/${note.id}`}
+                    element={
+                      <div className="container mx-auto">
+                        <SingleNote
+                          note={note}
+                          notes={notes}
+                          setSelected={setSelected}
+                          lang={lang}
+                          setNotes={setNotes}
+                          isDark={isDark}
+                        />
                       </div>
-                    </div>
-                  }
-                />
-              );
-            })}
-            <Route path="*" element={<NotFound lang={lang} />} />
-          </Routes>
+                    }
+                  />
+                );
+              })}
+              {[...uniqueDates].reverse().map((uniqueDate) => {
+                const notesOfDate = notes.filter(
+                  (note) => note.date === uniqueDate
+                );
+                return (
+                  <Route
+                    key={uniqueDate}
+                    path={`/notes/${uniqueDate.split("/").join("-")}`}
+                    element={
+                      <div className="container animate-fade-in-up opacity-0 mx-auto px-4 md:px-6">
+                        <div className="space-y-6">
+                          <h1 className="text-4xl font-extrabold my-8">
+                            {lang == "en"
+                              ? convertDate(uniqueDate)[0].toDateString()
+                              : convertDate(uniqueDate)[1]}
+                          </h1>
+                          {[...notesOfDate].reverse().map((note) => {
+                            return (
+                              <Note
+                                key={note.id}
+                                note={note}
+                                lang={lang}
+                                isDark={isDark}
+                                notes={notes}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    }
+                  />
+                );
+              })}
+              <Route path="*" element={<NotFound lang={lang} />} />
+            </Routes>
+          </div>
         </main>
         <Footer lang={lang} notes={notes} />
       </BrowserRouter>

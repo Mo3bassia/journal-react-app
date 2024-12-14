@@ -135,7 +135,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
   }
 
   function handleEdit() {
-    console.log("Mo")
+    console.log("Mo");
     let index = notes.indexOf(note);
     let editedNote = notes[notes.indexOf(note)];
     let date = new Date();
@@ -322,7 +322,12 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
       {error}
       <div
         key={id}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden p-4 animate-fade-in-up opacity-0"
+        className="transition-all duration-300 ease-in-out p-4 rounded-2xl shadow-lg
+        bg-gradient-to-br from-slate-50 via-white to-blue-50/80
+        hover:from-blue-50 hover:via-indigo-50/90 hover:to-purple-50
+        dark:from-[#1a1f2c] dark:via-[#1e2433] dark:to-[#232936]
+        border border-gray-100/50 dark:border-gray-700/50
+        animate-fade-in-up opacity-0 [animation-fill-mode:forwards]"
       >
         <div className="text-gray-900 dark:text-white border-b dark:border-gray-700 pb-6">
           <div className=" gap-2 flex items-center justify-between mt-2">

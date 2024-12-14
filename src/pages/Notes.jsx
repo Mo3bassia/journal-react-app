@@ -74,7 +74,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
     setSelectedDate(null);
   }
   return (
-    <>
+    <div>
       <div
         className={`${
           isDateOpen ? "" : "hidden"
@@ -186,6 +186,11 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                     strokeLinejoin="round"
                     d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z"
                   />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 6h.008v.008H6V6Z"
+                  />
                 </svg>
               </div>
             </div>
@@ -207,48 +212,60 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                 {lang == "en" ? "All" : "الكل"}
               </span>
               {Object.keys(categories).map((cat) => {
+                const percent = Math.round(
+                  notes.filter((n) => n.category == cat).length / notes.length * 100
+                );
                 return (
-                  <span
-                    style={{
-                      background: isDark
-                        ? categories[cat].dark.background
-                        : categories[cat].light.background,
-                      color: isDark ? "" : categories[cat].light.text,
-                      borderColor: isDark
-                        ? categories[cat].dark.border
-                        : categories[cat].light.border,
-                    }}
-                    onClick={() =>
-                      currentCategory != cat
-                        ? setCurrentCategory(cat)
-                        : setCurrentCategory("")
-                    }
-                    className={`text-xs md:text-sm  w-fit flex items-center gap-2 dark:text-gray-100 rounded-full px-3 py-1 outline-2 cursor-pointer border ${
-                      currentCategory == cat ? "scale-105 outline" : ""
-                    } transition-transform shadow-sm`}
-                    key={cat}
-                  >
-                    {cat}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-4"
+                  <div key={cat}>
+                    <span
+                      style={{
+                        background: isDark
+                          ? categories[cat].dark.background
+                          : categories[cat].light.background,
+                        color: isDark ? "" : categories[cat].light.text,
+                        borderColor: isDark
+                          ? categories[cat].dark.border
+                          : categories[cat].light.border,
+                      }}
+                      onClick={() =>
+                        currentCategory != cat
+                          ? setCurrentCategory(cat)
+                          : setCurrentCategory("")
+                      }
+                      className={`text-xs md:text-sm flex items-center gap-2 dark:text-gray-100 rounded-full px-3 py-1.5 outline-2 cursor-pointer border ${
+                        currentCategory == cat ? "scale-105 outline" : ""
+                      } transition-transform shadow-sm hover:scale-105`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 6h.008v.008H6V6Z"
-                      />
-                    </svg>
-                  </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 6h.008v.008H6V6Z"
+                        />
+                      </svg>
+                      {cat}
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs px-1.5 py-0.5 rounded-md bg-black/5 dark:bg-white/10 backdrop-blur-sm">
+                          {notes.filter((n) => n.category == cat).length}
+                        </span>
+                        <span className="text-[10px] text-black/40 dark:text-white/40 font-light">
+                          ({percent}%)
+                        </span>
+                      </div>
+                    </span>
+                  </div>
                 );
               })}
             </div>
@@ -336,7 +353,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    d="M16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                   />
                 </svg>
               </div>
@@ -408,7 +425,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
   // return (
   //   <div className="container mx-auto mt-9 px-4">
