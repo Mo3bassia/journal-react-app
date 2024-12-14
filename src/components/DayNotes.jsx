@@ -8,7 +8,7 @@ import ErrorAlert from "./ErrorAlert";
 import { moods } from "../App";
 import { Link } from "react-router-dom";
 
-function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
+function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark, viewMode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mood, setMood] = useState("");
   const [titleTxt, setTitle] = useState("");
@@ -125,17 +125,19 @@ function DayNotes({ uniqueDate, lang, notesOfDate, setNotes, notes, isDark }) {
                 : convertDate(uniqueDate)[1]}
             </Link>
           </h2>
-          {sortedNotes.map((note) => {
-            return (
-              <Note
-                key={note.id}
-                note={note}
-                lang={lang}
-                notes={notes}
-                isDark={isDark}
-              />
-            );
-          })}
+          <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}`}>
+            {sortedNotes.map((note) => {
+              return (
+                <Note
+                  key={note.id}
+                  note={note}
+                  lang={lang}
+                  notes={notes}
+                  isDark={isDark}
+                />
+              );
+            })}
+          </div>
           <button
             onClick={toggleModal}
             className="border-2 border-blue-600 hover:bg-blue-600 flex gap-2 px-6 py-3 rounded-lg text-slate-800 hover:text-white dark:text-white mx-auto transition-colors"

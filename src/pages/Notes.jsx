@@ -10,6 +10,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
   let [isDateOpen, setDateOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [selectedDate, setSelectedDate] = useState();
+  const [viewMode, setViewMode] = useState("grid"); // grid or list
 
   useEffect(() => {
     document.title = `${
@@ -192,6 +193,40 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                     d="M6 6h.008v.008H6V6Z"
                   />
                 </svg>
+              </div>
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-2 sm:border-l sm:pl-4 dark:border-gray-700">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === "grid"
+                      ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                  title={lang === "en" ? "Grid view" : "عرض شبكي"}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="7" height="7" x="3" y="3" rx="1" />
+                    <rect width="7" height="7" x="14" y="3" rx="1" />
+                    <rect width="7" height="7" x="14" y="14" rx="1" />
+                    <rect width="7" height="7" x="3" y="14" rx="1" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === "list"
+                      ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                  title={lang === "en" ? "List view" : "عرض قائمة"}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -411,6 +446,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
                   lang={lang}
                   notesOfDate={notesOfDate}
                   isDark={isDark}
+                  viewMode={viewMode}
                 />
               );
             })
