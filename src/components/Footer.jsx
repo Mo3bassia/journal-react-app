@@ -63,135 +63,136 @@ function Footer({ lang, notes }) {
                 {lang == "ar" ? "روابط سريعة" : "Quick Links"}
               </h3>
             </div><ul className="space-y-3">
-  {/* الرئيسية */}
-  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-    <Link to="/" className="flex gap-3 items-center">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5 text-blue-500"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 9.75V19a2.25 2.25 0 0 0 2.25 2.25H18.75A2.25 2.25 0 0 0 21 19V9.75M9 21V12.75h6V21M9 3.75L3 9.75h18L15 3.75"
-        />
-      </svg>
-      <span>{lang === "en" ? "Home" : "الرئيسية"}</span>
-    </Link>
-  </li>
+              {/* الرئيسية */}
+              <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                <Link to="/" className="flex gap-3 items-center group">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5 text-blue-500 transition-transform group-hover:scale-110"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 9.75V19a2.25 2.25 0 0 0 2.25 2.25H18.75A2.25 2.25 0 0 0 21 19V9.75M9 21V12.75h6V21M9 3.75L3 9.75h18L15 3.75"
+                    />
+                  </svg>
+                  <span className="transition-colors group-hover:text-blue-500">{lang === "en" ? "Home" : "الرئيسية"}</span>
+                </Link>
+              </li>
 
-  {/* إضافة */}
-  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-    <Link to="/add" className="flex gap-3 items-center">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5 text-green-500"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 4.75v14.5m7.25-7.25H4.75"
-        />
-      </svg>
-      <span>{lang === "en" ? "Add" : "إضافة"}</span>
-    </Link>
-  </li>
+              {/* إضافة */}
+              <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                <Link to="/add" className="flex gap-3 items-center group">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5 text-green-500 transition-transform group-hover:scale-110"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.75v14.5m7.25-7.25H4.75"
+                    />
+                  </svg>
+                  <span className="transition-colors group-hover:text-green-500">{lang === "en" ? "Add" : "إضافة"}</span>
+                </Link>
+              </li>
 
-  {/* مذكراتي */}
-  {notes.length > 0 && (
-    <>
-      <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-        <Link to="/notes" className="flex gap-3 items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 text-yellow-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 5.75v12.5A2.25 2.25 0 0 0 5.25 20.5H18.75A2.25 2.25 0 0 0 21 18.25V5.75M3 5.75L12 12.25m0 0L21 5.75m-9 6.5V5.75"
-            />
-          </svg>
-          <span>{lang === "en" ? "Notes" : "مذكراتي"}</span>
-        </Link>
-      </li>
+              {/* مذكراتي */}
+              {notes.length > 0 && (
+                <>
+                  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                    <Link to="/notes" className="flex gap-3 items-center group">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-yellow-500 transition-transform group-hover:scale-110"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3 5.75v12.5A2.25 2.25 0 0 0 5.25 20.5H18.75A2.25 2.25 0 0 0 21 18.25V5.75M3 5.75L12 12.25m0 0L21 5.75m-9 6.5V5.75"
+                        />
+                      </svg>
+                      <span className="transition-colors group-hover:text-yellow-500">{lang === "en" ? "Notes" : "مذكراتي"}</span>
+                    </Link>
+                  </li>
 
-      {/* المثبتة */}
-      <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-        <Link to="/pinned" className="flex gap-3 items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 text-red-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.75v14.5m-7.25-7.25H19.25"
-            />
-          </svg>
-          <span>{lang === "en" ? "Pinned" : "المثبتة"}</span>
-        </Link>
-      </li>
+                  {/* المثبتة */}
+                  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                    <Link to="/pinned" className="flex gap-3 items-center group">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-red-500 transition-transform group-hover:scale-110"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m15 11.25 1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53-1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53-1.28s.19-.94.53-1.28L12.75 9"
+                        />
+                      </svg>
+                      <span className="transition-colors group-hover:text-red-500">{lang === "en" ? "Pinned" : "المثبتة"}</span>
+                    </Link>
+                  </li>
 
-      {/* النسخة الاحتياطية */}
-      <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-        <Link to="/backup" className="flex gap-3 items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 text-purple-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.75 19.25h6.5M12 3.75V12.75M3.75 9.75h16.5"
-            />
-          </svg>
-          <span>{lang === "en" ? "Backup" : "نسخة احتياطية"}</span>
-        </Link>
-      </li>
-      <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
-        <Link to="/backup" className="flex gap-3 items-center">
-        <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5 text-pink-500"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 12l2 2 4-4 6 6 8-8"
-        />
-      </svg>
+                  {/* الإحصائيات */}
+                  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                    <Link to="/statistics" className="flex gap-3 items-center group">
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-indigo-500 transition-transform group-hover:scale-110"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+                        />
+                      </svg>
+                      <span className="transition-colors group-hover:text-indigo-500">{lang === "en" ? "Statistics" : "الإحصائيات"}</span>
+                    </Link>
+                  </li>
 
-          <span>{lang === "en" ? "Statistics" : "الإحصائيات"}</span>
-        </Link>
-      </li>
-    </>
-  )}
-</ul>
+                  {/* النسخة الاحتياطية */}
+                  <li className="text-sm opacity-80 hover:opacity-100 cursor-pointer">
+                    <Link to="/backup" className="flex gap-3 items-center group">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-purple-500 transition-transform group-hover:scale-110"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"
+                        />
+                      </svg>
+                      <span className="transition-colors group-hover:text-purple-500">{lang === "en" ? "Backup" : "نسخة احتياطية"}</span>
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
 
           </div>
           <div>
@@ -202,36 +203,59 @@ function Footer({ lang, notes }) {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="size-6"
+                className="w-5 h-5"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                  d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
                 />
               </svg>
               <h3 className="font-bold text-lg">
-                {lang == "en" ? "Random notes" : "مذكرات عشوائية"}
+                {lang == "ar" ? "مذكرات عشوائية" : "Random Notes"}
               </h3>
             </div>
-            <ul className="space-y-2">
-              {randomNotes.length != 0 ? (
-                randomNotes.map((note) => {
-                  return (
-                    <li
-                      key={`link-${note.id}`}
-                      className="text-sm opacity-80 hover:opacity-100 cursor-pointer"
-                    >
-                      <Link to={`/note/${note.id}`}>{note.title}</Link>
-                    </li>
-                  );
-                })
-              ) : (
-                <p className="opacity-70">
-                  {lang == "en" ? "No notes available" : "لا توجد مذكرات"}
-                </p>
-              )}
-            </ul>
+            {randomNotes.length > 0 ? (
+              <div className="space-y-3">
+                {randomNotes.map((note) => (
+                  <Link
+                    key={note.id}
+                    to={`/note/${note.id}`}
+                    className="block text-sm opacity-80 hover:opacity-100 transition-opacity"
+                  >
+                    <div className="flex items-start gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4 mt-1 flex-shrink-0 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.39-6.165A9.847 9.847 0 0 0 12.007 2Z" />
+                      </svg>
+                      <div>
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-1">
+                          {note.title || (lang === "en" ? "Untitled" : "بدون عنوان")}
+                        </h4>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-2">
+                          {note.note}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {lang === "en"
+                  ? "No notes available yet"
+                  : "لا توجد مذكرات متاحة بعد"}
+              </p>
+            )}
           </div>
         </div>
         <div className="text-center pt-6 border-t dark:border-gray-700 ">

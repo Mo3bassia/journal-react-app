@@ -241,10 +241,10 @@ function Statistics({ notes, lang, isDark, setSelected }) {
       hours = 0;
     }
 
+    if (hours >= 0 && hours < 6) return { range: "night", en: "Night (12 AM - 6 AM)", ar: "ليلاً (12 - 6)" };
     if (hours >= 6 && hours < 12) return { range: "morning", en: "Morning (6 AM - 12 PM)", ar: "صباحاً (6 - 12)" };
-    if (hours >= 12 && hours < 17) return { range: "afternoon", en: "Afternoon (12 PM - 5 PM)", ar: "ظهراً (12 - 5)" };
-    if (hours >= 17 && hours < 22) return { range: "evening", en: "Evening (5 PM - 10 PM)", ar: "مساءً (5 - 10)" };
-    return { range: "night", en: "Night (10 PM - 6 AM)", ar: "ليلاً (10 - 6)" };
+    if (hours >= 12 && hours < 18) return { range: "afternoon", en: "Afternoon (12 PM - 6 PM)", ar: "ظهراً (12 - 6)" };
+    return { range: "evening", en: "Evening (6 PM - 12 AM)", ar: "مساءً (6 - 12)" };
   };
 
   // Notes by time range
@@ -256,18 +256,50 @@ function Statistics({ notes, lang, isDark, setSelected }) {
 
   // Convert to array for chart
   const timeRangeData = Object.entries(notesByTimeRange).map(([range, count]) => {
-    const timeRangeInfo = getTimeRange(range === "night" ? "12:00 AM" : "6:00 AM");
+    let timeStr;
+    switch (range) {
+      case "night":
+        timeStr = "3:00 AM"; // Night (12 AM - 6 AM)
+        break;
+      case "morning":
+        timeStr = "9:00 AM"; // Morning (6 AM - 12 PM)
+        break;
+      case "afternoon":
+        timeStr = "3:00 PM"; // Afternoon (12 PM - 6 PM)
+        break;
+      case "evening":
+        timeStr = "9:00 PM"; // Evening (6 PM - 12 AM)
+        break;
+      default:
+        timeStr = "12:00 AM";
+    }
+    const timeRangeInfo = getTimeRange(timeStr);
     return {
       name: timeRangeInfo[lang],
       count,
       percentage: ((count / totalNotes) * 100).toFixed(1)
     };
+  }).sort((a, b) => {
+    const order = ["morning", "afternoon", "evening", "night"];
+    const aIndex = order.indexOf(Object.keys(notesByTimeRange).find(key => 
+      getTimeRange("9:00 AM")[key]?.en === a.name || getTimeRange("9:00 AM")[key]?.ar === a.name
+    ));
+    const bIndex = order.indexOf(Object.keys(notesByTimeRange).find(key => 
+      getTimeRange("9:00 AM")[key]?.en === b.name || getTimeRange("9:00 AM")[key]?.ar === b.name
+    ));
+    return aIndex - bIndex;
   });
 
   // Calculate most productive time
   const mostProductiveTime = timeRangeData.reduce((max, current) => 
     current.count > max.count ? current : max,
     { count: 0 }
+  );
+
+  // Calculate most productive day
+  const mostProductiveDay = dayChartData.reduce((max, current) => 
+    current.count > max.count ? current : max,
+    { count: 0, name: lang === "en" ? "No data" : "لا توجد بيانات" }
   );
 
   // Mood Statistics with Emojis
@@ -323,11 +355,10 @@ function Statistics({ notes, lang, isDark, setSelected }) {
     { count: 0, name: lang === "en" ? "No data" : "لا توجد بيانات" }
   );
 
-  // Calculate most productive day
-  const mostProductiveDay = dayChartData.reduce((max, current) => 
-    current.count > max.count ? current : max,
-    { count: 0, name: lang === "en" ? "No data" : "لا توجد بيانات" }
-  );
+  // Calculate notes status statistics
+  const pinnedNotes = notes.filter(note => note.pinned).length;
+  const editedNotes = notes.filter(note => note.lastEditDate !== '').length;
+  const scheduledNotes = notes.filter(note => note.scheduled).length;
 
   return (
     <div className="container opacity-0 animate-fade-in-up mx-auto px-4 py-8 animate-fade-in">
@@ -408,6 +439,35 @@ function Statistics({ notes, lang, isDark, setSelected }) {
         </div>
       </div>
 
+      {/* Notes Status */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
+            {lang === "en" ? "Notes Status" : "حالة المذكرات"}
+          </h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-400">
+                {lang === "en" ? "Pinned" : "المثبتة"}
+              </span>
+              <span className="text-blue-500 font-semibold">{pinnedNotes}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-400">
+                {lang === "en" ? "Edited" : "المعدلة"}
+              </span>
+              <span className="text-green-500 font-semibold">{editedNotes}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-400">
+                {lang === "en" ? "Scheduled" : "المضافة لاحقاً"}
+              </span>
+              <span className="text-purple-500 font-semibold">{scheduledNotes}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Writing Frequency and Note Length */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Writing Frequency */}
@@ -466,7 +526,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
             {lang === "en" ? "Note Length Distribution" : "توزيع طول المذكرات"}
           </h3>
-          <div className="h-[300px]">
+          <div className="h-[300px] dir-ltr" style={{ direction: 'ltr' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -500,7 +560,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
             {lang === "en" ? "Mood Distribution" : "توزيع المزاج"}
           </h3>
-          <div className="h-[300px]">
+          <div className="h-[300px] dir-ltr" style={{ direction: 'ltr' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -545,8 +605,8 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
             {lang === "en" ? "Notes by Time of Day" : "المذكرات حسب وقت اليوم"}
           </h3>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
+          <div style={{ direction: 'ltr' }}>
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={timeRangeData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
@@ -592,21 +652,13 @@ function Statistics({ notes, lang, isDark, setSelected }) {
         <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
           {lang === "en" ? "Notes by Day of Week" : "المذكرات حسب أيام الأسبوع"}
         </h3>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ direction: 'ltr' }}>
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dayChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="name"
-                tick={{ fill: isDark ? "#fff" : "#000" }}
-              />
-              <YAxis tick={{ fill: isDark ? "#fff" : "#000" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: isDark ? "#1f2937" : "#fff",
-                  color: isDark ? "#fff" : "#000",
-                }}
-              />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
               <Bar dataKey="count" fill="#0088FE" />
             </BarChart>
           </ResponsiveContainer>
@@ -618,21 +670,13 @@ function Statistics({ notes, lang, isDark, setSelected }) {
         <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
           {lang === "en" ? "Notes by Month" : "المذكرات حسب الشهور"}
         </h3>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ direction: 'ltr' }}>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={monthChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="name"
-                tick={{ fill: isDark ? "#fff" : "#000" }}
-              />
-              <YAxis tick={{ fill: isDark ? "#fff" : "#000" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: isDark ? "#1f2937" : "#fff",
-                  color: isDark ? "#fff" : "#000",
-                }}
-              />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
               <Line
                 type="monotone"
                 dataKey="count"

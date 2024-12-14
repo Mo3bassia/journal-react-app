@@ -256,12 +256,7 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               </div>
             </div>
           </div>
-          {/* <span
-            className={`w-fit px-4 py-2 rounded-lg shadow-lg bg-blue-400 block `}
-            onClick={() => setCurrentCategory("")}
-          >
-            {lang == "en" ? "Pinned Notes" : "المذكرات المثبتة"}
-          </span> */}
+          {/* Categories */}
           {Object.keys(categories).length !== 0 && (
             <div className="flex gap-x-3 animate-fade-in-up opacity-0 flex-wrap gap-y-4">
               <span
@@ -274,7 +269,8 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               </span>
               {Object.keys(categories).map((cat) => {
                 const percent = Math.round(
-                  notes.filter((n) => n.category == cat).length / notes.length * 100
+                  (notes.filter((n) => n.category == cat).length / notes.length) *
+                    100
                 );
                 return (
                   <div key={cat}>
@@ -331,132 +327,6 @@ function Notes({ lang, notes, setSelected, setNotes, isDark }) {
               })}
             </div>
           )}
-          <div className="flex animate-fade-in-up opacity-0 flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 lg:flex lg:flex-row gap-4 justify-center flex-wrap">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse  max-w-full gap-4">
-              <div className="p-2 bg-gray-50  dark:bg-gray-700 rounded-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-blue-500"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {notes.length}
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {lang == "en" ? "Total Notes" : "إجمالي المذكرات"}
-                </div>
-              </div>
-            </div>
-            <div
-              className={`  rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer ${
-                new Date(selectedDate).toLocaleDateString("en-US") ==
-                new Date().toLocaleDateString("en-US")
-                  ? "bg-slate-200 dark:bg-slate-700 "
-                  : "bg-white dark:bg-gray-800  "
-              }`}
-              onClick={() =>
-                new Date(selectedDate).toLocaleDateString("en-US") !=
-                new Date().toLocaleDateString("en-US")
-                  ? setSelectedDate(new Date())
-                  : setSelectedDate()
-              }
-            >
-              <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 text-green-500"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {
-                    notes.filter(
-                      (d) => d.date == new Date().toLocaleDateString("en-US")
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {lang == "en" ? "Today's Notes" : "مذكرات اليوم"}
-                </div>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4">
-              <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {notes.filter((n) => n.lastEditDate).length}
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {lang == "en" ? "Edited Notes" : "المذكرات المعدلة"}
-                </div>
-              </div>
-            </div>
-            <Link to="/pinned">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md flex items-center space-x-4 rtl:space-x-reverse max-w-full gap-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
-                <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-orange-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="size-6 cursor-pointer"
-                  >
-                    <line x1="12" x2="12" y1="17" y2="22"></line>
-                    <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {notes.filter((n) => n.pinned).length}
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {lang == "en" ? "Pinned Notes" : "المذكرات المثبتة"}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
           {notes.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 animate-fade-in-up opacity-0">
               <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-4 mb-4">
