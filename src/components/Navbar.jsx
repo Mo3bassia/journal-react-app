@@ -7,7 +7,7 @@ function Navbar({ setLanguage, lang, setIsDark }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="py-4 bg-white text-gray-900 dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 dark:text-white sticky top-0 z-50">
+    <nav className="py-6 bg-white text-gray-900 dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 dark:text-white sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center px-4">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight">
           <Link to="/" className="hover:opacity-80 transition-opacity flex items-center gap-2">

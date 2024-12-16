@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -306,7 +306,8 @@ function Statistics({ notes, lang, isDark, setSelected }) {
   const moodData = notes.reduce((acc, note) => {
     const mood = lang === "en" ? note.moodEn : note.moodAr;
     const emoji = note.emoji;
-    const key = `${emoji} ${mood}`;
+    const moodText = mood ? mood : (lang === "en" ? "Unknown" : "غير معروف");
+    const key = `${emoji} ${moodText}`;
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
@@ -337,7 +338,9 @@ function Statistics({ notes, lang, isDark, setSelected }) {
 
   // Calculate categories distribution
   const categoriesCount = notes.reduce((acc, note) => {
-    acc[note.category] = (acc[note.category] || 0) + 1;
+    const category = note.category ? note.category.trim() : '';
+    const categoryName = category === '' ? (lang === 'en' ? 'Unknown' : 'غير معروف') : category;
+    acc[categoryName] = (acc[categoryName] || 0) + 1;
     return acc;
   }, {});
 
@@ -357,8 +360,61 @@ function Statistics({ notes, lang, isDark, setSelected }) {
 
   // Calculate notes status statistics
   const pinnedNotes = notes.filter(note => note.pinned).length;
-  const editedNotes = notes.filter(note => note.lastEditDate !== '').length;
+  const editedNotes = notes.filter(note => note.lastEditDate).length;
   const scheduledNotes = notes.filter(note => note.addedLater).length;
+
+  // Calculate category-mood relationship
+  const categoryMoodRelation = notes.reduce((acc, note) => {
+    const category = note.category ? note.category.trim() : (lang === 'en' ? 'Unknown' : 'غير معروف');
+    const mood = lang === "en" ? note.moodEn : note.moodAr;
+    const moodText = mood ? mood : (lang === "en" ? "Unknown" : "غير معروف");
+    const key = `${category}-${moodText}`;
+    
+    if (!acc[key]) {
+      acc[key] = {
+        category,
+        mood: moodText,
+        emoji: note.emoji || '😐',
+        count: 0
+      };
+    }
+    
+    acc[key].count++;
+    return acc;
+  }, {});
+
+  // Convert to array and group by category
+  const categoryMoodAnalysis = Object.values(categoryMoodRelation)
+    .reduce((acc, { category, mood, emoji, count }) => {
+      if (!acc[category]) {
+        acc[category] = {
+          category,
+          totalNotes: 0,
+          moods: []
+        };
+      }
+      
+      acc[category].totalNotes += count;
+      acc[category].moods.push({
+        mood,
+        emoji,
+        count
+      });
+      
+      return acc;
+    }, {});
+
+  // Calculate percentages and sort
+  const sortedAnalysis = Object.values(categoryMoodAnalysis)
+    .map(cat => ({
+      ...cat,
+      moods: cat.moods.map(mood => ({
+        ...mood,
+        percentage: ((mood.count / cat.totalNotes) * 100).toFixed(1)
+      }))
+      .sort((a, b) => b.count - a.count)
+    }))
+    .sort((a, b) => b.totalNotes - a.totalNotes);
 
   return (
     <div className="container opacity-0 animate-fade-in-up mx-auto px-4 py-8 animate-fade-in">
@@ -368,7 +424,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 text-right">
             {lang === "en" ? "Most Active Day" : "أكثر يوم نشاطاً"}
           </h3>
-          <div className="text-xl text-gray-700 dark:text-gray-300 text-right">
+          <div className="text-xl font-bold text-purple-600 dark:text-purple-400 text-right">
             {formatDate(mostActiveDateParts, lang)}
             <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {dayNames[lang][mostActiveDateParts?.day || 0]}
@@ -383,7 +439,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 text-right">
             {lang === "en" ? "Most Active Time" : "أكثر وقت نشاطاً"}
           </h3>
-          <div className="text-xl text-gray-700 dark:text-gray-300 text-right">
+          <div className="text-xl font-bold text-orang-600 dark:text-orange-400 text-right">
             {lang === "en" ? mostProductiveTime.name : mostProductiveTime.name}
             <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {mostProductiveTime.count} {lang === "en" ? "notes" : "مذكرة"}
@@ -395,7 +451,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 text-right">
             {lang === "en" ? "Writing Streak" : "أيام الكتابة المتتالية"}
           </h3>
-          <div className="text-xl text-gray-700 dark:text-gray-300 text-right">
+          <div className="text-xl font-bold text-pink-600 dark:text-pink-400 text-right">
             {currentStreak} {lang === "en" ? "days" : "يوم"}
             <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {lang === "en" ? "Current streak" : "التتابع الحالي"}
@@ -440,7 +496,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
       </div>
 
       {/* Notes Status */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
           <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
             {lang === "en" ? "Notes Status" : "حالة المذكرات"}
@@ -466,90 +522,63 @@ function Statistics({ notes, lang, isDark, setSelected }) {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Writing Frequency and Note Length */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        {/* Writing Frequency */}
+        {/* Mood Distribution */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
-            {lang === "en" ? "Writing Frequency" : "معدل الكتابة"}
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
+            {lang === "en" ? "Most Used Moods" : "المشاعر الأكثر استخداماً"}
           </h3>
           <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-gray-700 dark:text-gray-300">
-                  {lang === "en" ? "Daily Writing" : "الكتابة اليومية"}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300">{writingFrequency.daily}%</span>
+            {moodChartData.slice(0, 5).map(mood => (
+              <div key={mood.name} className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {mood.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400">({mood.percentage}%)</span>
+                  <span className="bg-blue-500 dark:bg-blue-600 text-white px-2 py-1 rounded-md">
+                    {mood.value}
+                  </span>
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div 
-                  className="bg-blue-600 h-2.5 rounded-full" 
-                  style={{ width: `${writingFrequency.daily}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-gray-700 dark:text-gray-300">
-                  {lang === "en" ? "Weekly Writing" : "الكتابة الأسبوعية"}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300">{writingFrequency.weekly}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div 
-                  className="bg-green-600 h-2.5 rounded-full" 
-                  style={{ width: `${Math.min(writingFrequency.weekly, 100)}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-gray-700 dark:text-gray-300">
-                  {lang === "en" ? "Monthly Writing" : "الكتابة الشهرية"}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300">{writingFrequency.monthly}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div 
-                  className="bg-purple-600 h-2.5 rounded-full" 
-                  style={{ width: `${Math.min(writingFrequency.monthly, 100)}%` }}
-                ></div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Note Length Distribution */}
+      {/* Most Productive Time */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
-            {lang === "en" ? "Note Length Distribution" : "توزيع طول المذكرات"}
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            {lang === "en" ? "Total Notes" : "إجمالي المذكرات"}
           </h3>
-          <div className="h-[300px] dir-ltr" style={{ direction: 'ltr' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={noteLengthDistribution}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, value, percent }) =>
-                    `${name} (${value}, ${(percent * 100).toFixed(1)}%)`
-                  }
-                >
-                  {noteLengthDistribution.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={['#3b82f6', '#10b981', '#8b5cf6'][index]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            {totalNotes}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            {lang === "en" ? "Average Words" : "متوسط الكلمات"}
+          </h3>
+          <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+            {averageWords}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            {lang === "en" ? "Total Words: " : "إجمالي الكلمات: "}{totalWords}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            {lang === "en" ? "Note Length" : "طول المذكرة"}
+          </h3>
+          <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+            {averageLength}
+          </p>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            <p>{lang === "en" ? "Longest: " : "الأطول: "}{longestNote}</p>
+            <p>{lang === "en" ? "Shortest: " : "الأقصر: "}{shortestNote}</p>
           </div>
         </div>
       </div>
@@ -590,12 +619,12 @@ function Statistics({ notes, lang, isDark, setSelected }) {
               {lang === "en" ? "Mood Breakdown" : "تفصيل المزاج"}
             </h4>
             <div className="space-y-2">
-              {moodChartData.map((mood, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">{mood.name}</span>
-                  <span className="text-gray-600 dark:text-gray-400">{mood.value} ({mood.percentage}%)</span>
-                </div>
-              ))}
+              {moodChartData.map((mood, index) => 
+                  {return <div key={index} className="flex justify-between items-center">
+                    <span className="text-gray-600 dark:text-gray-400">{mood.name || "غير معروف"}</span>
+                    <span className="text-gray-600 dark:text-gray-400">{mood.value} ({mood.percentage}%)</span>
+                  </div>}
+                )}
             </div>
           </div>
         </div>
@@ -654,36 +683,75 @@ function Statistics({ notes, lang, isDark, setSelected }) {
         </h3>
         <div style={{ direction: 'ltr' }}>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dayChartData}>
+            <BarChart data={dayChartData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#0088FE" />
+              <XAxis type="number" />
+              <YAxis
+                dataKey="name"
+                type="category"
+                width={100}
+                tick={{ fill: isDark ? '#e5e7eb' : '#374151' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  color: isDark ? '#e5e7eb' : '#374151'
+                }}
+              />
+              <Bar
+                dataKey="count"
+                fill={isDark ? '#3b82f6' : '#2563eb'}
+                radius={[0, 4, 4, 0]}
+              >
+                <LabelList
+                  dataKey="count"
+                  position="right"
+                  fill={isDark ? '#e5e7eb' : '#374151'}
+                />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Notes by Month */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
-          {lang === "en" ? "Notes by Month" : "المذكرات حسب الشهور"}
+      {/* Monthly Distribution */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg mb-8">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
+          {lang === "en" ? "Notes by Month" : "المذكرات حسب الشهر"}
         </h3>
-        <div style={{ direction: 'ltr' }}>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={monthChartData}>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={monthChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="count"
-                stroke="#00C49F"
-                strokeWidth={2}
+              <XAxis
+                dataKey="name"
+                tick={{ fill: isDark ? '#e5e7eb' : '#374151' }}
               />
-            </LineChart>
+              <YAxis
+                tick={{ fill: isDark ? '#e5e7eb' : '#374151' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  color: isDark ? '#e5e7eb' : '#374151'
+                }}
+              />
+              <Bar
+                dataKey="count"
+                fill={isDark ? '#3b82f6' : '#2563eb'}
+                radius={[4, 4, 0, 0]}
+              >
+                <LabelList
+                  dataKey="count"
+                  position="top"
+                  fill={isDark ? '#e5e7eb' : '#374151'}
+                />
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -698,7 +766,7 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <div className="space-y-5">
             {categoriesData.map((category) => (
               <div key={category.name} className="mb-4">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between mb-2">
                   <span className="text-base text-gray-700 dark:text-gray-300">
                     {category.name}
                   </span>
@@ -746,6 +814,43 @@ function Statistics({ notes, lang, isDark, setSelected }) {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Category-Mood Relationship */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg mb-8">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
+          {lang === "en" ? "Category & Mood Analysis" : "تحليل التصنيفات والمشاعر"}
+        </h3>
+        <div className="space-y-6">
+          {sortedAnalysis.map(({ category, totalNotes, moods }) => (
+            <div key={category} className="border-b dark:border-gray-700 last:border-0 pb-4 last:pb-0">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-lg font-medium text-gray-800 dark:text-gray-200">
+                  {category}
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {totalNotes} {lang === "en" ? "notes" : "مذكرة"}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {moods.map(({ mood, emoji, count, percentage }) => (
+                  <div key={`${category}-${mood}`} className="flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{emoji}</span>
+                      <span className="text-gray-600 dark:text-gray-400">{mood}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-400">({percentage}%)</span>
+                      <span className="bg-blue-500 dark:bg-blue-600 text-white px-2 py-1 rounded-md">
+                        {count}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
