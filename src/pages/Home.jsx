@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Joyride from 'react-joyride';
+import SEO from '../components/SEO';
 
 function Home({ lang, setSelected, isDark }) {
   const [runTour, setRunTour] = useState(() => {
@@ -103,6 +104,10 @@ function Home({ lang, setSelected, isDark }) {
 
   return (
     <>
+      <SEO 
+        title={lang === "ar" ? "المذكرات - صفحتك الرئيسية" : "Journal - Your Home Page"}
+        description={lang === "ar" ? "سجل أفكارك ومشاعرك اليومية" : "Record your daily thoughts and feelings"}
+      />
       <Joyride
         steps={steps}
         continuous
