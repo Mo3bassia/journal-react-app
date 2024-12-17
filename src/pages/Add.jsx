@@ -7,7 +7,9 @@ import { moods } from "../App";
 function Add({ lang, setSelected, setNotes }) {
   useEffect(function () {
     setSelected("Add");
+    window.scrollTo(0, 0);
   }, []);
+
   const [mood, setMood] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
@@ -16,6 +18,30 @@ function Add({ lang, setSelected, setNotes }) {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const timeForMsg = 5000;
+
+  useEffect(() => {
+    let timeoutId;
+    if (success) {
+      timeoutId = setTimeout(() => {
+        setSuccess("");
+      }, timeForMsg);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [success]);
+
+  useEffect(() => {
+    let timeoutId;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError("");
+      }, timeForMsg);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [error]);
 
   useEffect(() => {
     document.title = `${
@@ -45,11 +71,6 @@ function Add({ lang, setSelected, setNotes }) {
               timeForMsg={timeForMsg}
             />
           );
-          if (!success) {
-            setTimeout(() => {
-              setSuccess("");
-            }, timeForMsg);
-          }
 
           setCategory("");
           setNote("");
@@ -101,11 +122,6 @@ function Add({ lang, setSelected, setNotes }) {
               timeForMsg={timeForMsg}
             />
           );
-          if (!error) {
-            setTimeout(() => {
-              setError("");
-            }, timeForMsg);
-          }
         }
       }
     });
@@ -117,7 +133,7 @@ function Add({ lang, setSelected, setNotes }) {
       {error}
       <div className="container mx-auto mt-9 px-4 animate-fade-in-up opacity-0">
         <h2 className="text-3xl lg:text-4xl xl:text-5xl block font-medium text-gray-900 dark:text-white mb-5 md:mb-8">
-          {lang == "en" ? "💬 Write your notes here..." : "💬 أدخل الملاحظة..."}
+          {lang == "en" ? " Write your notes here..." : " أدخل الملاحظة..."}
         </h2>
         <form ref={form}>
           <div className="my-6">
@@ -125,7 +141,7 @@ function Add({ lang, setSelected, setNotes }) {
               htmlFor="title"
               className="text-lg md:text-xl lg:text-2xl  font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
             >
-              <span>{lang == "en" ? "📝 Title..." : "📝 العنوان..."}</span>
+              <span>{lang == "en" ? " Title..." : " العنوان..."}</span>
               <span className="text-sm">
                 {lang == "en" ? "(Optional)" : "(اختياري)"}
               </span>
@@ -149,7 +165,7 @@ function Add({ lang, setSelected, setNotes }) {
               className="text-lg md:text-xl lg:text-2xl font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 flex items-center justify-between"
             >
               <span>
-                {lang == "en" ? " 📂 Category..." : " 📂 التصنيف ..."}
+                {lang == "en" ? " Category..." : " التصنيف ..."}
               </span>
               <span className="text-sm">
                 {lang == "en" ? "(Optional)" : "(اختياري)"}
@@ -173,7 +189,7 @@ function Add({ lang, setSelected, setNotes }) {
               htmlFor="Note"
               className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between"
             >
-              <span>{lang == "en" ? "✍️ Note..." : "✍️ الملاحظة..."}</span>
+              <span>{lang == "en" ? " Note..." : " الملاحظة..."}</span>
               <span className="text-sm">
                 {lang == "en" ? "(required)" : "(اجباري)"}
                 <span className="text-red-600"> *</span>
@@ -195,7 +211,7 @@ function Add({ lang, setSelected, setNotes }) {
           </div>
           <div className="my-6">
             <label className="text-lg md:text-xl lg:text-2xl flex font-medium text-gray-600 dark:text-gray-400 mb-3 md:mb-4 items-center justify-between">
-              <span>{lang == "en" ? " 💭 Mood..." : " 💭 المزاج  ..."}</span>
+              <span>{lang == "en" ? " Mood..." : " المزاج  ..."}</span>
               <span className="text-sm">
                 {lang == "en" ? "(Optional)" : "(اختياري)"}
               </span>
@@ -207,7 +223,7 @@ function Add({ lang, setSelected, setNotes }) {
             className="text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-blue-600 hover:bg-blue-800 flex gap-2 px-6 py-3 rounded-lg text-white mt-5 mx-auto"
             onClick={(e) => handleAdd(e)}
           >
-            {lang == "en" ? "add ➕" : "اضافة ➕"}
+            {lang == "en" ? "add " : "اضافة "}
           </button>
         </form>
       </div>

@@ -16,12 +16,12 @@ function Navbar({ setLanguage, lang, setIsDark }) {
   ];
 
   return (
-    <nav className="py-6 bg-white text-gray-900 dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 dark:text-white sticky top-0 z-50">
+    <nav className="sticky top-0 py-4 bg-white text-gray-900 dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 dark:text-white z-50">
       <div className="container mx-auto flex justify-between items-center px-4">
         {/* Logo */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight">
           <Link to="/" className="hover:opacity-80 transition-opacity flex items-center gap-2">
-            <span className="text-4xl">📚</span>
+            <span className="text-2xl sm:text-3xl">📚</span>
             <span className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               {lang == "en" ? "Journal" : "يومياتي"}
             </span>
@@ -32,11 +32,13 @@ function Navbar({ setLanguage, lang, setIsDark }) {
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={() => setLanguage(lang === "en" ? "ar" : "en")}
-            className="px-3 py-2 bg-gray-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 outline-none cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
+            className="lang-toggle px-2 py-1.5 bg-gray-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 outline-none cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors flex items-center gap-2 text-sm whitespace-nowrap"
           >
             {lang === "en" ? "🇸🇦 عربي" : "🇺🇸 English"}
           </button>
-          <ToggleBtn setIsDark={setIsDark} />
+          <div className="theme-toggle">
+            <ToggleBtn setIsDark={setIsDark} />
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -45,7 +47,7 @@ function Navbar({ setLanguage, lang, setIsDark }) {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg
-            className="w-6 h-6"
+            className="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -71,10 +73,10 @@ function Navbar({ setLanguage, lang, setIsDark }) {
         {/* Mobile Menu - Only visible on small screens */}
         <div className={`${
           isMenuOpen 
-            ? 'block absolute top-full left-0 right-0 bg-white dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 shadow-lg' 
+            ? 'block fixed top-[65px] left-0 right-0 bg-white dark:bg-[#232936] border-b border-gray-200 dark:border-gray-700 shadow-lg max-h-[calc(100vh-65px)] overflow-y-auto' 
             : 'hidden'
         } md:hidden`}>
-          <ul className="p-4 space-y-3">
+          <ul className="p-4 space-y-2">
             {navLinks.map((link) => (
               <li key={link.path}>
                 <Link 

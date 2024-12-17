@@ -22,8 +22,9 @@ function Statistics({ notes, lang, isDark, setSelected }) {
   useEffect(() => {
     document.title = `${
       lang == "en" ? "Journal | Statistics" : "يومياتي | الإحصائيات"
-    }`
+    }`;
     setSelected('statistics');
+    window.scrollTo(0, 0);
   }, [lang]);
 
   // Helper function to get date parts
@@ -416,6 +417,44 @@ function Statistics({ notes, lang, isDark, setSelected }) {
     }))
     .sort((a, b) => b.totalNotes - a.totalNotes);
 
+  // Content Analysis
+  const analyzeContent = () => {
+    // Most used words analysis
+    const commonWords = lang === "en" ? 
+      ['the', 'and', 'to', 'a', 'in', 'that', 'is', 'was', 'for', 'it'] :
+      ['في', 'من', 'على', 'إلى', 'عن', 'مع', 'هذا', 'أن', 'كان', 'هو'];
+
+    const words = notes
+      .map(note => note.note.toLowerCase())
+      .join(' ')
+      .split(/\s+/)
+      .filter(word => 
+        word.length > 2 && 
+        !commonWords.includes(word) &&
+        !/^\d+$/.test(word)
+      );
+
+    const wordCount = {};
+    words.forEach(word => {
+      wordCount[word] = (wordCount[word] || 0) + 1;
+    });
+
+    const topWords = Object.entries(wordCount)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 5)
+      .map(([word, count]) => ({ word, count }));
+
+    // Title length analysis
+    const titledNotes = notes.filter(note => note.title.trim() !== '');
+    const avgTitleLength = Math.round(
+      titledNotes.reduce((acc, note) => acc + note.title.length, 0) / titledNotes.length || 0
+    );
+
+    return { topWords, avgTitleLength, totalTitledNotes: titledNotes.length };
+  };
+
+  const contentAnalysis = analyzeContent();
+
   return (
     <div className="container opacity-0 animate-fade-in-up mx-auto px-4 py-8 animate-fade-in">
       {/* General Stats */}
@@ -523,29 +562,6 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           </div>
         </div>
 
-        {/* Mood Distribution */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 text-right">
-            {lang === "en" ? "Most Used Moods" : "المشاعر الأكثر استخداماً"}
-          </h3>
-          <div className="space-y-4">
-            {moodChartData.slice(0, 5).map(mood => (
-              <div key={mood.name} className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {mood.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">({mood.percentage}%)</span>
-                  <span className="bg-blue-500 dark:bg-blue-600 text-white px-2 py-1 rounded-md">
-                    {mood.value}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Most Productive Time */}
@@ -854,6 +870,62 @@ function Statistics({ notes, lang, isDark, setSelected }) {
         </div>
       </div>
 
+      {/* Content Analysis */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Most Used Words */}
+        <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            {lang === "en" ? "Most Used Words" : "الكلمات الأكثر استخداماً"}
+          </h3>
+          <div className="space-y-3">
+            {contentAnalysis.topWords.map((item, index) => (
+              <div key={item.word} className="flex items-center justify-between">
+                <span className="text-gray-600 dark:text-gray-400">
+                  {item.word}
+                </span>
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="h-2 rounded-full bg-blue-500" 
+                    style={{ 
+                      width: `${(item.count / contentAnalysis.topWords[0].count) * 100}px`,
+                      opacity: 1 - (index * 0.15)
+                    }}
+                  />
+                  <span className="text-sm text-gray-500 dark:text-gray-400 w-12 text-right">
+                    {item.count}x
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Title Analysis */}
+        <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            {lang === "en" ? "Title Analysis" : "تحليل العناوين"}
+          </h3>
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {lang === "en" ? "Average Title Length" : "متوسط طول العنوان"}
+              </p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {contentAnalysis.avgTitleLength} {lang === "en" ? "characters" : "حرف"}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {lang === "en" ? "Notes with Titles" : "المذكرات ذات العناوين"}
+              </p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {contentAnalysis.totalTitledNotes} / {notes.length}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Total Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg px-6 py-8 shadow-lg">
@@ -886,6 +958,18 @@ function Statistics({ notes, lang, isDark, setSelected }) {
           <p className="text-5xl font-bold text-orange-600 dark:text-orange-400 text-center">
             {Object.keys(categoriesCount).length}
           </p>
+        </div>
+      </div>
+
+      {/* AI Badge */}
+      <div className="flex justify-center items-center mt-8 mb-4">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${isDark ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-800'} border ${isDark ? 'border-gray-700' : 'border-gray-300'}`}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+          <span className="text-sm font-medium">
+            {lang === 'ar' ? 'تحليل إحصائي بالذكاء الاصطناعي' : 'AI Statistical Analysis'}
+          </span>
         </div>
       </div>
     </div>

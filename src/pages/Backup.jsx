@@ -1,12 +1,79 @@
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SuccessAlert from '../components/SuccessAlert';
 import ErrorAlert from '../components/ErrorAlert';
+import Joyride from 'react-joyride';
 
-const Backup = ({ lang, setNotes, notes,setSelected }) => {
+const Backup = ({ lang, setNotes, notes, setSelected, isDark }) => {
   const [inputData, setInputData] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [runTour, setRunTour] = useState(() => {
+    return localStorage.getItem('dontShowBackupGuide') !== 'true';
+  });
   const timeForMsg = 5000;
+
+  const handleDontShowAgain = () => {
+    localStorage.setItem('dontShowBackupGuide', 'true');
+    setRunTour(false);
+  };
+
+  const steps = [
+    {
+      target: '.current-data',
+      content: (
+        <div>
+          <div className="mb-4">
+            {lang === 'en' 
+              ? 'This section shows your current data. You can copy it to create a backup.'
+              : 'يعرض هذا القسم بياناتك الحالية. يمكنك نسخها لإنشاء نسخة احتياطية.'}
+          </div>
+          <button
+            onClick={handleDontShowAgain}
+            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline"
+          >
+            {lang === 'en' ? "Don't show this guide again" : 'عدم عرض هذا الدليل مرة أخرى'}
+          </button>
+        </div>
+      ),
+      disableBeacon: true,
+    },
+    {
+      target: '.copy-btn',
+      content: (
+        <div>
+          <div className="mb-4">
+            {lang === 'en'
+              ? 'Click here to copy your data to clipboard. Save it somewhere safe!'
+              : 'انقر هنا لنسخ بياناتك إلى الحافظة. احفظها في مكان آمن!'}
+          </div>
+          <button
+            onClick={handleDontShowAgain}
+            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline"
+          >
+            {lang === 'en' ? "Don't show this guide again" : 'عدم عرض هذا الدليل مرة أخرى'}
+          </button>
+        </div>
+      ),
+    },
+    {
+      target: '.restore-data',
+      content: (
+        <div>
+          <div className="mb-4">
+            {lang === 'en'
+              ? 'If you need to restore your data, paste your backup here and click the restore button.'
+              : 'إذا كنت بحاجة لاستعادة بياناتك، الصق النسخة الاحتياطية هنا واضغط على زر الاستعادة.'}
+          </div>
+          <button
+            onClick={handleDontShowAgain}
+            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline"
+          >
+            {lang === 'en' ? "Don't show this guide again" : 'عدم عرض هذا الدليل مرة أخرى'}
+          </button>
+        </div>
+      ),
+    }
+  ];
 
   useEffect(() => {
     setSelected('backup');
@@ -123,6 +190,21 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
     <>
       {error}
       {success}
+      <Joyride
+        steps={steps}
+        run={runTour}
+        continuous={true}
+        styles={{
+          options: {
+            arrowColor: isDark ? '#1a1f2b' : '#f7f7f7',
+            backgroundColor: isDark ? '#1a1f2b' : '#fff',
+            textColor: isDark ? '#f7f7f7' : '#1a1f2b',
+            primaryColor: isDark ? '#3498db' : '#3498db',
+            overlayColor: isDark ? 'rgba(26, 31, 43, 0.5)' : 'rgba(247, 247, 247, 0.5)',
+            zIndex: 1000,
+          },
+        }}
+      />
       <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1a1f2b] dark:text-white animate-fade-in-up opacity-0">
         <div className="max-w-4xl mx-auto p-4">
           <h1 className="text-3xl font-bold mb-8">
@@ -130,7 +212,7 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
           </h1>
 
           {/* Current Data Section */}
-          <div className="mb-8 p-6 rounded-lg bg-white dark:bg-gray-800 shadow-lg">
+          <div className="mb-8 p-6 rounded-lg bg-white dark:bg-gray-800 shadow-lg current-data">
             <h2 className="text-xl font-semibold mb-4">
               {lang === 'en' ? 'Current Data' : 'البيانات الحالية'}
             </h2>
@@ -143,7 +225,7 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
               />
               <button
                 onClick={handleCopy}
-                className="mt-4 px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white transition-colors"
+                className="mt-4 px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white transition-colors copy-btn"
               >
                 {lang === 'en' ? 'Copy Data' : 'نسخ البيانات'}
               </button>
@@ -151,7 +233,7 @@ const Backup = ({ lang, setNotes, notes,setSelected }) => {
           </div>
 
           {/* Restore Data Section */}
-          <div className="p-6 rounded-lg bg-white dark:bg-gray-800 shadow-lg">
+          <div className="p-6 rounded-lg bg-white dark:bg-gray-800 shadow-lg restore-data">
             <h2 className="text-xl font-semibold mb-4">
               {lang === 'en' ? 'Restore Data' : 'استعادة البيانات'}
             </h2>

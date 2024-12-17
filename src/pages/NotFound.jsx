@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+
 function NotFound({ lang }) {
   useEffect(() => {
     document.title = `${
       lang == "en" ? "Journal | 404 not found" : "يومياتي | صفحة غير موجودة"
     }`;
+    window.scrollTo(0, 0);
   }, [lang]);
 
   return (

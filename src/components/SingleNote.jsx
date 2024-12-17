@@ -17,7 +17,7 @@ function SingleNote({ lang, note, setSelected, notes, setNotes, isDark }) {
       top: 0,
       behavior: "smooth"
     });
-  }, []);
+  }, [note]);
 
   const {
     id,

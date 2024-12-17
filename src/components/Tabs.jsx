@@ -6,10 +6,10 @@ function Tabs({ lang, selected, setSelected }) {
     setSelected(event.target.value);
   };
   return (
-    <div className="radio-inputs flex flex-wrap rounded-lg box-border shadow-lg dark:shadow-slate-800 dark:shadow-md p-1 max-w-[300px] text-sm mx-auto my-7">
+    <div className="radio-inputs flex flex-wrap justify-center gap-2 rounded-lg box-border shadow-lg dark:shadow-slate-800 dark:shadow-md p-2 max-w-full sm:max-w-[600px] text-xs sm:text-sm mx-auto my-7">
       <NavLink
         to="/add"
-        className="radio flex-1 text-center w-28 sm:w-32"
+        className="radio flex-1 text-center min-w-[80px] sm:min-w-[100px]"
         onClick={() => setSelected("Add")}
       >
         <label className="">
@@ -37,7 +37,7 @@ function Tabs({ lang, selected, setSelected }) {
 
       <NavLink
         to="/notes"
-        className="radio flex-1 text-center w-28 sm:w-32"
+        className="radio flex-1 text-center min-w-[80px] sm:min-w-[100px]"
         onClick={() => setSelected("Notes")}
       >
         <label className="radio flex-1 text-center">
@@ -64,7 +64,7 @@ function Tabs({ lang, selected, setSelected }) {
       </NavLink>
       <NavLink
         to="/pinned"
-        className="radio flex-1 text-center w-28 sm:w-32"
+        className="radio flex-1 text-center min-w-[80px] sm:min-w-[100px]"
         onClick={() => setSelected("Pinned")}
       >
         <label className="radio flex-1 text-center">
@@ -91,7 +91,7 @@ function Tabs({ lang, selected, setSelected }) {
       </NavLink>
       <NavLink
         to="/statistics"
-        className="radio flex-1 text-center w-28 sm:w-32"
+        className="radio flex-1 text-center min-w-[80px] sm:min-w-[100px]"
         onClick={() => setSelected("statistics")}
       >
         <label className="radio flex-1 text-center">
@@ -118,7 +118,7 @@ function Tabs({ lang, selected, setSelected }) {
       </NavLink>
       <NavLink
         to="/backup"
-        className="radio flex-1 text-center w-28 sm:w-32"
+        className="radio flex-1 text-center min-w-[80px] sm:min-w-[100px]"
         onClick={() => setSelected("backup")}
       >
         <label className="radio flex-1 text-center">
